@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI差旅 一站式差旅系统 - AI生成</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+        .content-container {
+            min-height: calc(100vh - 10rem);
+            display: flex;
+            flex-direction: column;
+            max-height: none;
+            padding-bottom: 2rem;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .journey-item {
+            position: relative;
+            padding-left: 28px;
+        }
+        .journey-item:before {
+            content: "";
+            position: absolute;
+            left: 10px;
+            top: 10px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #ef4444;
+        }
+        .workflow-step {
+            position: relative;
+        }
+        .workflow-step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: -30px;
+            width: 30px;
+            height: 2px;
+            background-color: #e5e7eb;
+            transform: translateY(-50%);
+        }
+        .nav-connector {
+            position: absolute;
+            width: 2px;
+            background-color: #e5e7eb;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 0;
+            top: 12px;
+            height: calc(100% - 12px - 50px);
+        }
+        .nav-item {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+        .nav-item a {
+            display: block;
+            width: 100%;
+            transition: all 0.2s;
+        }
+        .nav-item.active a {
+            border-color: #2563eb;
+            background-color: #f0f7ff;
+            color: #2563eb;
+            font-weight: 500;
+        }
+        @keyframes loading {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        #aiProgressBar {
+            position: relative;
+            overflow: hidden;
+            transition: width 0.5s ease;
+        }
+        #aiProgressBar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+            animation: loading 1.5s infinite;
+        }
+        .highlight-item {
+            transition: all 0.3s ease;
+        }
+        .scale-105 {
+            transform: scale(1.05);
+        }
+        button, a {
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- 主体内容区 -->
+    <main class="max-w-6xl mx-auto p-8 flex">
+        <!-- 左侧竖向导航 -->
+        <div class="w-64 bg-white border-r border-gray-200 rounded-lg p-4 mr-8">
+            <div class="font-medium text-lg text-gray-700 mb-4">任务流</div>
+            <div class="relative pb-4">
+                <!-- 竖向连接线 -->
+                <div class="nav-connector"></div>
+                
+                <!-- 步骤1 - 开始 -->
+                <div class="nav-item">
+                    <a href="home.html" class="bg-white border border-gray-200 rounded-lg p-4 text-gray-700 hover:bg-gray-50 flex items-center justify-between">
+                        <span>1. 开始</span>
+                        <i class="fas fa-check-circle text-blue-500"></i>
+                    </a>
+                </div>
+                
+                <!-- 步骤2 - AI生成 -->
+                <div class="nav-item active">
+                    <a href="#" class="bg-blue-50 border-2 border-blue-600 text-blue-700 rounded-lg p-4 font-medium flex items-center justify-between">
+                        <span>2. AI生成</span>
+                        <i class="fas fa-check-circle text-blue-500"></i>
+                    </a>
+                </div>
+                
+                <!-- 步骤3 - 人工确认 -->
+                <div class="nav-item">
+                    <a href="confirm_order.html" class="bg-white border border-gray-200 rounded-lg p-4 text-gray-700 hover:bg-gray-50">
+                        3. 人工确认
+                    </a>
+                </div>
+                
+                <!-- 步骤4 - 报销费用 -->
+                <div class="nav-item">
+                    <a href="page6.html" class="bg-white border border-gray-200 rounded-lg p-4 text-gray-700 hover:bg-gray-50">
+                        4. 报销费用
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 内容区 -->
+        <div class="flex-1">
+            <div class="bg-white border border-gray-200 rounded-lg p-8 content-container">
+                <!-- 添加Logo SVG -->
+                <h1 class="text-3xl font-bold text-gray-800 flex items-center mb-6">
+                    <svg width="45" height="45" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" class="mr-2">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M3.18335 6.00092C3.18335 3.93905 4.85482 2.26758 6.91668 2.26758C8.97855 2.26758 10.65 3.93905 10.65 6.00091V7.49935C11.2729 6.90161 12.1186 6.53425 13.05 6.53425C14.3242 6.53425 15.4379 7.22169 16.0403 8.24593C16.6573 7.6798 17.48 7.33425 18.3834 7.33425C19.6576 7.33425 20.7712 8.02169 21.3736 9.04593C21.9906 8.4798 22.8133 8.13424 23.7167 8.13424C25.6313 8.13424 27.1834 9.68632 27.1834 11.6009V20.4009C27.1834 24.2301 24.0792 27.3342 20.25 27.3342L10.65 27.3342H10.1167V27.3331C9.94161 27.3317 9.81393 27.3286 9.69806 27.3216C6.1985 27.1099 3.40768 24.3191 3.196 20.8195C3.18335 20.6104 3.18335 20.3628 3.18335 19.8676V6.00092Z" fill="url(#paint0_linear_25594_78403)"/>
+                        <mask id="mask0_25594_78403" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="3" y="2" width="25" height="26">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M3.18335 5.99994C3.18335 3.93808 4.85482 2.2666 6.91668 2.2666C8.97855 2.2666 10.65 3.93807 10.65 5.99994V7.49837C11.2729 6.90063 12.1186 6.53327 13.05 6.53327C14.3242 6.53327 15.4379 7.22072 16.0403 8.24496C16.6573 7.67882 17.48 7.33327 18.3834 7.33327C19.6576 7.33327 20.7712 8.02072 21.3736 9.04496C21.9906 8.47882 22.8133 8.13327 23.7167 8.13327C25.6313 8.13327 27.1834 9.68535 27.1834 11.5999V20.3999C27.1834 24.2291 24.0792 27.3333 20.25 27.3333L10.65 27.3333H10.1167V27.3321C9.94161 27.3308 9.81393 27.3276 9.69806 27.3206C6.1985 27.1089 3.40768 24.3181 3.196 20.8186C3.18335 20.6094 3.18335 20.3618 3.18335 19.8666V5.99994Z" fill="url(#paint1_linear_25594_78403)"/>
+                        </mask>
+                        <g mask="url(#mask0_25594_78403)">
+                            <g filter="url(#filter0_f_25594_78403)">
+                                <circle cx="3.58316" cy="1.86655" r="8.13333" fill="#FFD952"/>
+                            </g>
+                            <g filter="url(#filter1_f_25594_78403)">
+                                <ellipse cx="25.5834" cy="25.8666" rx="13.0667" ry="7.06667" fill="#315CD8"/>
+                            </g>
+                        </g>
+                        <path d="M5.58337 15.8671C5.58337 14.3586 5.58337 13.6044 6.052 13.1357C6.052 13.1357 6.052 13.1357 6.052 13.1357C6.52063 12.6671 7.27488 12.6671 8.78337 12.6671H21.5834C23.0919 12.6671 23.8461 12.6671 24.3147 13.1357C24.3147 13.1357 24.3147 13.1357 24.3147 13.1357C24.7834 13.6044 24.7834 14.3586 24.7834 15.8671C24.7834 20.1412 24.7834 22.2782 23.4556 23.606C23.4556 23.606 23.4556 23.606 23.4556 23.606C22.1278 24.9338 19.9908 24.9338 15.7167 24.9338H14.65C10.376 24.9338 8.23894 24.9338 6.91116 23.606C6.91116 23.606 6.91116 23.606 6.91115 23.606C5.58337 22.2782 5.58337 20.1412 5.58337 15.8671Z" fill="white"/>
+                        <path d="M12.7832 18.2672C12.7832 19.74 12.4499 20.9339 10.7832 20.9339C9.11654 20.9339 8.7832 19.7487 8.7832 18.2672C8.7832 16.7857 9.11654 15.6005 10.7832 15.6005C12.4499 15.6005 12.7832 16.7944 12.7832 18.2672Z" fill="url(#paint2_linear_25594_78403)"/>
+                        <path d="M21.5834 18.2672C21.5834 19.74 21.25 20.9339 19.5834 20.9339C17.9167 20.9339 17.5834 19.7487 17.5834 18.2672C17.5834 16.7857 17.9167 15.6005 19.5834 15.6005C21.25 15.6005 21.5834 16.7944 21.5834 18.2672Z" fill="url(#paint3_linear_25594_78403)"/>
+                        <defs>
+                            <filter id="filter0_f_25594_78403" x="-12.5502" y="-14.2668" width="32.2667" height="32.2667" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                                <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                                <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+                                <feGaussianBlur stdDeviation="4" result="effect1_foregroundBlur_25594_78403"/>
+                            </filter>
+                            <filter id="filter1_f_25594_78403" x="4.51672" y="10.7999" width="42.1333" height="30.1334" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                                <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                                <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+                                <feGaussianBlur stdDeviation="4" result="effect1_foregroundBlur_25594_78403"/>
+                            </filter>
+                            <linearGradient id="paint0_linear_25594_78403" x1="6.61157" y1="1.46758" x2="23.4871" y2="27.1623" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#F14C74"/>
+                                <stop offset="0.961703" stop-color="#C44EE2"/>
+                            </linearGradient>
+                            <linearGradient id="paint1_linear_25594_78403" x1="6.61157" y1="1.4666" x2="23.4871" y2="27.1613" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#F14C74"/>
+                                <stop offset="0.961703" stop-color="#C44EE2"/>
+                            </linearGradient>
+                            <linearGradient id="paint2_linear_25594_78403" x1="10.7832" y1="15.6005" x2="10.7832" y2="20.9339" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#2C2B30"/>
+                                <stop offset="1" stop-color="#5F6067"/>
+                            </linearGradient>
+                            <linearGradient id="paint3_linear_25594_78403" x1="19.5834" y1="15.6005" x2="19.5834" y2="20.9339" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#2C2B30"/>
+                                <stop offset="1" stop-color="#5F6067"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    AI生成
+                </h1>
+                
+                <!-- AI状态提示条 -->
+                <div id="aiStatusBar" class="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-6 flex items-center justify-between relative overflow-hidden">
+                    <div class="flex items-center flex-grow">
+                        <svg width="24" height="24" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" class="mr-3 animate-pulse">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M3.18335 6.00092C3.18335 3.93905 4.85482 2.26758 6.91668 2.26758C8.97855 2.26758 10.65 3.93905 10.65 6.00091V7.49935C11.2729 6.90161 12.1186 6.53425 13.05 6.53425C14.3242 6.53425 15.4379 7.22169 16.0403 8.24593C16.6573 7.6798 17.48 7.33425 18.3834 7.33425C19.6576 7.33425 20.7712 8.02169 21.3736 9.04593C21.9906 8.4798 22.8133 8.13424 23.7167 8.13424C25.6313 8.13424 27.1834 9.68632 27.1834 11.6009V20.4009C27.1834 24.2301 24.0792 27.3342 20.25 27.3342L10.65 27.3342H10.1167V27.3331C9.94161 27.3317 9.81393 27.3286 9.69806 27.3216C6.1985 27.1099 3.40768 24.3191 3.196 20.8195C3.18335 20.6104 3.18335 20.3628 3.18335 19.8676V6.00092Z" fill="#3b82f6"/>
+                        </svg>
+                        <div class="flex-grow">
+                            <p class="font-medium text-blue-800" id="aiStatusText">AI正在分析您的行程并生成最优建议...</p>
+                            <div class="w-full h-1.5 bg-blue-100 rounded-full mt-1 overflow-hidden">
+                                <div id="aiProgressBar" class="h-full bg-blue-500 rounded-full" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 倒计时显示区（已禁用） -->
+                    <div id="countdownDisplay" class="text-blue-700 font-bold text-2xl ml-4 hidden bg-blue-100 w-10 h-10 rounded-full flex items-center justify-center" style="display: none;"></div>
+                </div>
+                
+                <!-- 子步骤导航条 -->
+                <div class="border-b border-gray-200 mb-6">
+                    <nav class="flex -mb-px">
+                        <button id="tab-button-1" class="tab-button active px-6 py-3 border-b-2 border-blue-500 text-blue-500 font-medium">
+                            <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-blue-100 text-blue-600 text-xs font-medium mr-2">1</span>
+                            申请单
+                        </button>
+                        <button id="tab-button-2" class="tab-button px-6 py-3 border-b-2 border-transparent text-gray-500 hover:text-gray-700 font-medium">
+                            <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-gray-100 text-gray-600 text-xs font-medium mr-2">2</span>
+                            交通推荐
+                        </button>
+                        <button id="tab-button-3" class="tab-button px-6 py-3 border-b-2 border-transparent text-gray-500 hover:text-gray-700 font-medium">
+                            <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-gray-100 text-gray-600 text-xs font-medium mr-2">3</span>
+                            酒店推荐
+                        </button>
+                    </nav>
+                </div>
+                
+                <!-- 申请单内容 -->
+                <div id="tab-content-1" class="tab-content active">
+                    <p class="mt-3 text-lg text-gray-600 mb-6">
+                        根据您当前录入的内容，已帮您自动生成申请单。请确认～
+                    </p>
+
+                    <!-- 出发地-目的地 -->
+                    <div class="bg-gray-50 p-6 rounded-lg mb-6">
+                        <div class="flex items-center justify-center text-xl font-medium">
+                            <span class="text-gray-800">北京</span>
+                            <svg class="w-8 h-8 mx-6 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                            </svg>
+                            <span class="text-gray-800">深圳</span>
+                        </div>
+                    </div>
+
+                    <!-- 日期信息 -->
+                    <div class="grid grid-cols-3 gap-6 mb-6">
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p class="text-sm text-gray-500 mb-1">开始日期</p>
+                            <p class="text-lg font-medium">2025-05-14</p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg text-center">
+                            <p class="text-sm text-gray-500 mb-1">出差天数</p>
+                            <p class="text-lg font-medium">3天</p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg text-right">
+                            <p class="text-sm text-gray-500 mb-1">结束日期</p>
+                            <p class="text-lg font-medium">2025-05-16</p>
+                        </div>
+                    </div>
+
+                    <!-- 行程明细 -->
+                    <div class="bg-white border border-gray-200 rounded-lg p-5 mb-6">
+                        <h3 class="text-lg font-medium text-gray-800 mb-4">出差行程明细信息</h3>
+                        <ul class="space-y-4">
+                            <li class="journey-item py-2 border-b border-gray-100">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-800">2025-05-14</span>
+                                    <span class="text-blue-600">1天</span>
+                                </div>
+                                <div class="flex items-center text-gray-600 mt-1">
+                                    <span>北京</span>
+                                    <i class="fas fa-long-arrow-alt-right mx-2 text-gray-400"></i>
+                                    <span>深圳</span>
+                                </div>
+                            </li>
+                            <li class="journey-item py-2 border-b border-gray-100">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-800">2025-05-15</span>
+                                    <span class="text-blue-600">1天</span>
+                                </div>
+                                <div class="flex items-center text-gray-600 mt-1">
+                                    <span>深圳</span>
+                                    <i class="fas fa-location-dot mx-2 text-gray-400"></i>
+                                    <span>深圳大学</span>
+                                </div>
+                            </li>
+                            <li class="journey-item py-2">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-800">2025-05-16</span>
+                                    <span class="text-blue-600">1天</span>
+                                </div>
+                                <div class="flex items-center text-gray-600 mt-1">
+                                    <span>深圳</span>
+                                    <i class="fas fa-long-arrow-alt-right mx-2 text-gray-400"></i>
+                                    <span>北京</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="flex justify-end">
+                        <button id="next-to-transport" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-8 rounded-lg flex items-center">
+                            下一步：交通推荐
+                            <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- 交通推荐内容 -->
+                <div id="tab-content-2" class="tab-content">
+                    <p class="mt-3 text-lg text-gray-600 mb-6">
+                        根据您当前目的地位置、天气、距离还有单位报销额，多个Agent已帮您汇总推荐以下最优交通方式。
+                    </p>
+
+                    <!-- 天气预报 -->
+                    <div class="mb-6">
+                        <h3 class="text-lg font-medium text-gray-800 mb-3">深圳未来3天天气预报</h3>
+                        <div class="grid grid-cols-3 gap-4">
+                            <div class="bg-gradient-to-br from-blue-50 to-sky-50 rounded-lg p-4 flex flex-col items-center">
+                                <p class="text-gray-500 mb-1">2025-05-14</p>
+                                <div class="text-yellow-500 text-3xl mb-1">
+                                    <i class="fas fa-sun"></i>
+                                </div>
+                                <p class="text-gray-700 font-medium">晴天</p>
+                                <p class="text-sm text-gray-500 mt-1">25°C-30°C</p>
+                            </div>
+                            <div class="bg-gradient-to-br from-blue-50 to-sky-50 rounded-lg p-4 flex flex-col items-center">
+                                <p class="text-gray-500 mb-1">2025-05-15</p>
+                                <div class="text-yellow-500 text-3xl mb-1">
+                                    <i class="fas fa-sun"></i>
+                                </div>
+                                <p class="text-gray-700 font-medium">晴天</p>
+                                <p class="text-sm text-gray-500 mt-1">24°C-31°C</p>
+                            </div>
+                            <div class="bg-gradient-to-br from-blue-50 to-sky-50 rounded-lg p-4 flex flex-col items-center">
+                                <p class="text-gray-500 mb-1">2025-05-16</p>
+                                <div class="text-yellow-500 text-3xl mb-1">
+                                    <i class="fas fa-sun"></i>
+                                </div>
+                                <p class="text-gray-700 font-medium">晴天</p>
+                                <p class="text-sm text-gray-500 mt-1">26°C-32°C</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 交通方式选择 -->
+                    <div class="mb-5">
+                        <h3 class="text-lg font-medium text-gray-800 mb-3">推荐交通方式</h3>
+                        <div class="flex border-b border-gray-200">
+                            <button id="tab-plane" class="py-2 px-4 border-b-2 border-blue-500 text-blue-600 font-medium flex items-center transport-tab active">
+                                <i class="fas fa-plane mr-2"></i>飞机
+                                <span class="ml-2 text-xs bg-blue-100 text-blue-600 py-0.5 px-1.5 rounded">推荐</span>
+                            </button>
+                            <button id="tab-train" class="py-2 px-4 text-gray-600 font-medium flex items-center transport-tab">
+                                <i class="fas fa-train mr-2"></i>高铁
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 飞机列表 -->
+                    <div id="content-plane" class="transport-content active">
+                        <div class="bg-white border-2 border-green-500 rounded-lg p-4 mb-3 shadow-md relative">
+                            <!-- AI推荐标签 -->
+                            <div class="absolute -top-3 -right-3 bg-green-500 text-white px-3 py-1 rounded-lg shadow-md flex items-center">
+                                <svg width="20" height="20" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" class="mr-1">
+                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M3.18335 6.00092C3.18335 3.93905 4.85482 2.26758 6.91668 2.26758C8.97855 2.26758 10.65 3.93905 10.65 6.00091V7.49935C11.2729 6.90161 12.1186 6.53425 13.05 6.53425C14.3242 6.53425 15.4379 7.22169 16.0403 8.24593C16.6573 7.6798 17.48 7.33425 18.3834 7.33425C19.6576 7.33425 20.7712 8.02169 21.3736 9.04593C21.9906 8.4798 22.8133 8.13424 23.7167 8.13424C25.6313 8.13424 27.1834 9.68632 27.1834 11.6009V20.4009C27.1834 24.2301 24.0792 27.3342 20.25 27.3342L10.65 27.3342H10.1167V27.3331C9.94161 27.3317 9.81393 27.3286 9.69806 27.3216C6.1985 27.1099 3.40768 24.3191 3.196 20.8195C3.18335 20.6104 3.18335 20.3628 3.18335 19.8676V6.00092Z" fill="white"/>
+                                </svg>
+                                <span class="font-bold">AI推荐</span>
+                            </div>
+                            
+                            <div class="flex justify-between items-center mb-2">
+                                <div class="flex items-center">
+                                    <img src="https://picsum.photos/id/24/30/30" alt="航空公司" class="w-8 h-8 rounded-full mr-2">
+                                    <span class="font-medium">南方航空 CZ3456</span>
+                                </div>
+                                <div class="text-xl font-bold text-red-500">¥780</div>
+                            </div>
+                            <div class="flex justify-between items-center mt-3">
+                                <div class="text-center">
+                                    <div class="text-lg font-medium">08:30</div>
+                                    <div class="text-sm text-gray-500">北京首都机场 T2</div>
+                                </div>
+                                <div class="flex flex-col items-center mx-4">
+                                    <div class="text-sm text-gray-500">2小时30分钟</div>
+                                    <div class="w-24 h-0.5 bg-gray-300 relative my-1">
+                                        <div class="absolute -top-1.5 right-0 w-3 h-3 transform rotate-45 border-t-2 border-r-2 border-gray-300"></div>
+                                    </div>
+                                    <div class="text-xs text-gray-500">直飞</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-lg font-medium">11:00</div>
+                                    <div class="text-sm text-gray-500">深圳宝安机场 T3</div>
+                                </div>
+                            </div>
+                            <div class="mt-2 bg-green-50 rounded-lg p-2 border border-green-100">
+                                <div class="text-sm text-green-700">
+                                    <i class="fas fa-check-circle mr-1"></i>
+                                    AI分析：最佳性价比选择，准点率高，行李额度充足
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white border border-gray-200 rounded-lg p-4 mb-3">
+                            <div class="flex justify-between items-center mb-2">
+                                <div class="flex items-center">
+                                    <img src="https://picsum.photos/id/26/30/30" alt="航空公司" class="w-8 h-8 rounded-full mr-2">
+                                    <span class="font-medium">东方航空 MU5238</span>
+                                </div>
+                                <div class="text-xl font-bold text-red-500">¥920</div>
+                            </div>
+                            <div class="flex justify-between items-center mt-3">
+                                <div class="text-center">
+                                    <div class="text-lg font-medium">10:15</div>
+                                    <div class="text-sm text-gray-500">北京首都机场 T3</div>
+                                </div>
+                                <div class="flex flex-col items-center mx-4">
+                                    <div class="text-sm text-gray-500">2小时20分钟</div>
+                                    <div class="w-24 h-0.5 bg-gray-300 relative my-1">
+                                        <div class="absolute -top-1.5 right-0 w-3 h-3 transform rotate-45 border-t-2 border-r-2 border-gray-300"></div>
+                                    </div>
+                                    <div class="text-xs text-gray-500">直飞</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-lg font-medium">12:35</div>
+                                    <div class="text-sm text-gray-500">深圳宝安机场 T3</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white border border-gray-200 rounded-lg p-4 mb-3">
+                            <div class="flex justify-between items-center mb-2">
+                                <div class="flex items-center">
+                                    <img src="https://picsum.photos/id/28/30/30" alt="航空公司" class="w-8 h-8 rounded-full mr-2">
+                                    <span class="font-medium">国航 CA1835</span>
+                                </div>
+                                <div class="text-xl font-bold text-red-500">¥830</div>
+                            </div>
+                            <div class="flex justify-between items-center mt-3">
+                                <div class="text-center">
+                                    <div class="text-lg font-medium">13:40</div>
+                                    <div class="text-sm text-gray-500">北京首都机场 T3</div>
+                                </div>
+                                <div class="flex flex-col items-center mx-4">
+                                    <div class="text-sm text-gray-500">2小时40分钟</div>
+                                    <div class="w-24 h-0.5 bg-gray-300 relative my-1">
+                                        <div class="absolute -top-1.5 right-0 w-3 h-3 transform rotate-45 border-t-2 border-r-2 border-gray-300"></div>
+                                    </div>
+                                    <div class="text-xs text-gray-500">直飞</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-lg font-medium">16:20</div>
+                                    <div class="text-sm text-gray-500">深圳宝安机场 T3</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 高铁列表 -->
+                    <div id="content-train" class="transport-content hidden">
+                        <div class="bg-white border border-gray-200 rounded-lg p-4 mb-3">
+                            <div class="flex justify-between items-center mb-2">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 mr-2">
+                                        <i class="fas fa-train"></i>
+                                    </div>
+                                    <span class="font-medium">G123 高铁</span>
+                                </div>
+                                <div class="text-xl font-bold text-red-500">¥553</div>
+                            </div>
+                            <div class="flex justify-between items-center mt-3">
+                                <div class="text-center">
+                                    <div class="text-lg font-medium">09:15</div>
+                                    <div class="text-sm text-gray-500">北京南站</div>
+                                </div>
+                                <div class="flex flex-col items-center mx-4">
+                                    <div class="text-sm text-gray-500">5小时40分钟</div>
+                                    <div class="w-24 h-0.5 bg-gray-300 relative my-1">
+                                        <div class="absolute -top-1.5 right-0 w-3 h-3 transform rotate-45 border-t-2 border-r-2 border-gray-300"></div>
+                                    </div>
+                                    <div class="text-xs text-gray-500">直达</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-lg font-medium">14:55</div>
+                                    <div class="text-sm text-gray-500">深圳北站</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white border border-gray-200 rounded-lg p-4 mb-3">
+                            <div class="flex justify-between items-center mb-2">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 mr-2">
+                                        <i class="fas fa-train"></i>
+                                    </div>
+                                    <span class="font-medium">G234 高铁</span>
+                                </div>
+                                <div class="text-xl font-bold text-red-500">¥553</div>
+                            </div>
+                            <div class="flex justify-between items-center mt-3">
+                                <div class="text-center">
+                                    <div class="text-lg font-medium">11:20</div>
+                                    <div class="text-sm text-gray-500">北京南站</div>
+                                </div>
+                                <div class="flex flex-col items-center mx-4">
+                                    <div class="text-sm text-gray-500">5小时35分钟</div>
+                                    <div class="w-24 h-0.5 bg-gray-300 relative my-1">
+                                        <div class="absolute -top-1.5 right-0 w-3 h-3 transform rotate-45 border-t-2 border-r-2 border-gray-300"></div>
+                                    </div>
+                                    <div class="text-xs text-gray-500">直达</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-lg font-medium">16:55</div>
+                                    <div class="text-sm text-gray-500">深圳北站</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end mt-6">
+                        <button id="back-to-application" class="border border-gray-300 bg-white hover:bg-gray-50 text-gray-700 font-medium py-2.5 px-6 rounded-lg flex items-center mr-3">
+                            <i class="fas fa-arrow-left mr-2"></i>
+                            上一步：申请单
+                        </button>
+                        <button id="next-to-hotel" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-8 rounded-lg flex items-center">
+                            下一步：酒店推荐
+                            <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- 酒店推荐内容 -->
+                <div id="tab-content-3" class="tab-content">
+                    <p class="mt-3 text-lg text-gray-600 mb-6">
+                        根据您的目的地位置、行程和公司出差标准，已为您筛选出最合适的酒店推荐。
+                    </p>
+
+                    <!-- 地图预览 -->
+                    <div class="mb-6">
+                        <h3 class="text-lg font-medium text-gray-800 mb-3">目的地位置概览</h3>
+                        <div class="bg-gray-200 rounded-lg h-56 relative overflow-hidden">
+                            <img src="https://picsum.photos/id/1031/1200/300" alt="地图" class="object-cover w-full h-full">
+                            <div class="absolute bottom-3 right-3 bg-white rounded-lg shadow-md p-3">
+                                <p class="text-sm font-medium">深圳大学</p>
+                                <p class="text-xs text-gray-500">距离市中心 8.5 公里</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 酒店分类 -->
+                    <div class="mb-5">
+                        <h3 class="text-lg font-medium text-gray-800 mb-3">推荐酒店</h3>
+                        <div class="flex border-b border-gray-200">
+                            <button id="tab-standard" class="py-2 px-4 border-b-2 border-blue-500 text-blue-600 font-medium flex items-center hotel-tab active">
+                                <i class="fas fa-star mr-2"></i>商务舒适型
+                                <span class="ml-2 text-xs bg-blue-100 text-blue-600 py-0.5 px-1.5 rounded">符合标准</span>
+                            </button>
+                            <button id="tab-budget" class="py-2 px-4 text-gray-600 font-medium flex items-center hotel-tab">
+                                <i class="fas fa-money-bill-wave mr-2"></i>经济实惠型
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 商务酒店列表 -->
+                    <div id="content-standard" class="hotel-content active">
+                        <div class="bg-white border-2 border-green-500 rounded-lg overflow-hidden mb-4 shadow-md relative">
+                            <!-- AI推荐标签 -->
+                            <div class="absolute top-3 right-3 bg-green-500 text-white px-3 py-1 rounded-lg shadow-md flex items-center z-10">
+                                <svg width="20" height="20" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" class="mr-1">
+                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M3.18335 6.00092C3.18335 3.93905 4.85482 2.26758 6.91668 2.26758C8.97855 2.26758 10.65 3.93905 10.65 6.00091V7.49935C11.2729 6.90161 12.1186 6.53425 13.05 6.53425C14.3242 6.53425 15.4379 7.22169 16.0403 8.24593C16.6573 7.6798 17.48 7.33425 18.3834 7.33425C19.6576 7.33425 20.7712 8.02169 21.3736 9.04593C21.9906 8.4798 22.8133 8.13424 23.7167 8.13424C25.6313 8.13424 27.1834 9.68632 27.1834 11.6009V20.4009C27.1834 24.2301 24.0792 27.3342 20.25 27.3342L10.65 27.3342H10.1167V27.3331C9.94161 27.3317 9.81393 27.3286 9.69806 27.3216C6.1985 27.1099 3.40768 24.3191 3.196 20.8195C3.18335 20.6104 3.18335 20.3628 3.18335 19.8676V6.00092Z" fill="white"/>
+                                </svg>
+                                <span class="font-bold">AI推荐</span>
+                            </div>
+                            
+                            <div class="flex">
+                                <div class="w-1/3">
+                                    <img src="https://picsum.photos/id/164/300/200" alt="酒店" class="h-full w-full object-cover">
+                                </div>
+                                <div class="w-2/3 p-4">
+                                    <div class="flex justify-between items-start">
+                                        <div>
+                                            <h4 class="text-xl font-medium">深圳湾艾维克酒店</h4>
+                                            <div class="flex items-center mt-1">
+                                                <div class="flex text-yellow-400">
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="far fa-star"></i>
+                                                </div>
+                                                <span class="text-sm text-gray-500 ml-2">4.0分</span>
+                                            </div>
+                                        </div>
+                                        <div class="text-2xl font-bold text-red-500">¥450</div>
+                                    </div>
+                                    
+                                    <div class="mt-3">
+                                        <div class="flex items-center text-sm text-gray-600 mb-2">
+                                            <i class="fas fa-map-marker-alt text-red-500 mr-2"></i>
+                                            <span>南山区科苑南路2666号</span>
+                                            <span class="ml-2 px-2 py-0.5 bg-blue-50 text-blue-700 rounded text-xs">距深圳大学 1.2 公里</span>
+                                        </div>
+                                        <div class="flex flex-wrap mt-3">
+                                            <span class="bg-blue-50 text-blue-700 text-xs px-2 py-1 rounded mr-2 mb-2">免费WiFi</span>
+                                            <span class="bg-blue-50 text-blue-700 text-xs px-2 py-1 rounded mr-2 mb-2">免费停车</span>
+                                            <span class="bg-blue-50 text-blue-700 text-xs px-2 py-1 rounded mr-2 mb-2">健身中心</span>
+                                            <span class="bg-blue-50 text-blue-700 text-xs px-2 py-1 rounded mr-2 mb-2">商务中心</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mt-3 bg-green-50 rounded-lg p-2 border border-green-100">
+                                        <div class="text-sm text-green-700">
+                                            <i class="fas fa-check-circle mr-1"></i>
+                                            AI分析：符合公司住宿标准，临近目的地，配套设施完善，获评分高
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white border border-gray-200 rounded-lg overflow-hidden mb-4">
+                            <div class="flex">
+                                <div class="w-1/3">
+                                    <img src="https://picsum.photos/id/167/300/200" alt="酒店" class="h-full w-full object-cover">
+                                </div>
+                                <div class="w-2/3 p-4">
+                                    <div class="flex justify-between items-start">
+                                        <div>
+                                            <h4 class="text-xl font-medium">深圳益田威斯汀酒店</h4>
+                                            <div class="flex items-center mt-1">
+                                                <div class="flex text-yellow-400">
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                </div>
+                                                <span class="text-sm text-gray-500 ml-2">4.8分</span>
+                                            </div>
+                                        </div>
+                                        <div class="text-2xl font-bold text-red-500">¥680</div>
+                                    </div>
+                                    
+                                    <div class="mt-3">
+                                        <div class="flex items-center text-sm text-gray-600 mb-2">
+                                            <i class="fas fa-map-marker-alt text-red-500 mr-2"></i>
+                                            <span>南山区深南大道9028号</span>
+                                            <span class="ml-2 px-2 py-0.5 bg-blue-50 text-blue-700 rounded text-xs">距深圳大学 3.5 公里</span>
+                                        </div>
+                                        <div class="flex flex-wrap mt-3">
+                                            <span class="bg-blue-50 text-blue-700 text-xs px-2 py-1 rounded mr-2 mb-2">免费WiFi</span>
+                                            <span class="bg-blue-50 text-blue-700 text-xs px-2 py-1 rounded mr-2 mb-2">免费停车</span>
+                                            <span class="bg-blue-50 text-blue-700 text-xs px-2 py-1 rounded mr-2 mb-2">游泳池</span>
+                                            <span class="bg-blue-50 text-blue-700 text-xs px-2 py-1 rounded mr-2 mb-2">健身中心</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end mt-6">
+                        <button id="back-to-transport" class="border border-gray-300 bg-white hover:bg-gray-50 text-gray-700 font-medium py-2.5 px-6 rounded-lg flex items-center mr-3">
+                            <i class="fas fa-arrow-left mr-2"></i>
+                            上一步：交通推荐
+                        </button>
+                        <a href="confirm_order.html" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-8 rounded-lg flex items-center">
+                            下一步：确认订单
+                            <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // 标签页切换逻辑
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            // 切换标签页的函数
+            function switchTab(tabId) {
+                // 移除所有活动状态
+                tabButtons.forEach(btn => {
+                    btn.classList.remove('active');
+                    btn.classList.remove('border-blue-500', 'text-blue-500');
+                    btn.classList.add('border-transparent', 'text-gray-500');
+                    
+                    // 更新数字样式
+                    const numSpan = btn.querySelector('span');
+                    numSpan.classList.remove('bg-blue-100', 'text-blue-600');
+                    numSpan.classList.add('bg-gray-100', 'text-gray-600');
+                });
+                
+                tabContents.forEach(content => {
+                    content.classList.remove('active');
+                });
+                
+                // 添加活动状态到当前标签
+                const activeButton = document.getElementById('tab-button-' + tabId);
+                activeButton.classList.add('active');
+                activeButton.classList.remove('border-transparent', 'text-gray-500');
+                activeButton.classList.add('border-blue-500', 'text-blue-500');
+                
+                // 更新数字样式
+                const activeNumSpan = activeButton.querySelector('span');
+                activeNumSpan.classList.remove('bg-gray-100', 'text-gray-600');
+                activeNumSpan.classList.add('bg-blue-100', 'text-blue-600');
+                
+                const activeContent = document.getElementById('tab-content-' + tabId);
+                activeContent.classList.add('active');
+            }
+            
+            // 为每个标签按钮添加点击事件
+            tabButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const tabId = this.id.split('-')[2];
+                    switchTab(tabId);
+                });
+            });
+            
+            // 设置下一步按钮事件
+            document.getElementById('next-to-transport').addEventListener('click', function() {
+                switchTab('2');
+            });
+            
+            document.getElementById('next-to-hotel').addEventListener('click', function() {
+                switchTab('3');
+            });
+            
+            document.getElementById('back-to-application').addEventListener('click', function() {
+                switchTab('1');
+            });
+            
+            document.getElementById('back-to-transport').addEventListener('click', function() {
+                switchTab('2');
+            });
+            
+            // 交通方式标签切换
+            const transportTabs = document.querySelectorAll('.transport-tab');
+            const transportContents = document.querySelectorAll('.transport-content');
+            
+            transportTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // 移除所有活动状态
+                    transportTabs.forEach(t => {
+                        t.classList.remove('active', 'border-blue-500', 'text-blue-600');
+                        t.classList.add('text-gray-600');
+                    });
+                    
+                    transportContents.forEach(content => {
+                        content.classList.add('hidden');
+                        content.classList.remove('active');
+                    });
+                    
+                    // 添加活动状态
+                    this.classList.add('active', 'border-blue-500', 'text-blue-600');
+                    this.classList.remove('text-gray-600');
+                    
+                    // 显示对应内容
+                    const contentId = this.id.split('-')[1];
+                    const activeContent = document.getElementById('content-' + contentId);
+                    activeContent.classList.add('active');
+                    activeContent.classList.remove('hidden');
+                });
+            });
+    
+            // 酒店类型标签切换
+            const hotelTabs = document.querySelectorAll('.hotel-tab');
+            const hotelContents = document.querySelectorAll('.hotel-content');
+            
+            hotelTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // 移除所有活动状态
+                    hotelTabs.forEach(t => {
+                        t.classList.remove('active', 'border-blue-500', 'text-blue-600');
+                        t.classList.add('text-gray-600');
+                    });
+                    
+                    hotelContents.forEach(content => {
+                        content.classList.add('hidden');
+                        content.classList.remove('active');
+                    });
+                    
+                    // 添加活动状态
+                    this.classList.add('active', 'border-blue-500', 'text-blue-600');
+                    this.classList.remove('text-gray-600');
+                    
+                    // 显示对应内容
+                    const contentId = this.id.split('-')[1];
+                    const activeContent = document.getElementById('content-' + contentId);
+                    activeContent.classList.add('active');
+                    activeContent.classList.remove('hidden');
+                });
+            });
+
+            // 手动进度更新函数
+            function updateProgress(percent, text) {
+                const aiProgressBar = document.getElementById('aiProgressBar');
+                const aiStatusText = document.getElementById('aiStatusText');
+                
+                aiProgressBar.style.width = percent + '%';
+                if (text) {
+                    aiStatusText.textContent = text;
+                }
+            }
+
+            // 初始化显示
+            updateProgress(100, 'AI分析完成，请手动查看和确认各项推荐方案');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI差旅 一站式差旅系统</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+        .content-container {
+            min-height: calc(100vh - 8rem); /* 调整最小高度 */
+            display: flex;
+            flex-direction: column;
+        }
+        .example-text {
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .example-text:hover {
+            background-color: #f0f9ff;
+        }
+        .copy-tooltip {
+            position: absolute;
+            background-color: #4b5563;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            opacity: 0;
+            transition: opacity 0.2s;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+        .copy-tooltip.show {
+            opacity: 1;
+        }
+        .feature-card {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .feature-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .nav-connector {
+            position: absolute;
+            width: 2px;
+            background-color: #e5e7eb;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 0;
+            top: 12px;
+            /* 修改为自动计算高度，使其不会超出 */
+            height: calc(100% - 12px - 50px);
+        }
+        .nav-item {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+        .nav-item a {
+            display: block;
+            width: 100%;
+            transition: all 0.2s;
+        }
+        .nav-item.active a {
+            border-color: #2563eb;
+            background-color: #f0f7ff;
+            color: #2563eb;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- 主体内容区 -->
+    <main class="max-w-6xl mx-auto p-8 flex">
+        <!-- 左侧竖向导航 -->
+        <div class="w-64 bg-white border-r border-gray-200 rounded-lg p-4 mr-8">
+            <div class="font-medium text-lg text-gray-700 mb-4">任务流</div>
+            <div class="relative pb-4">
+                <!-- 竖向连接线 -->
+                <div class="nav-connector"></div>
+                
+                <!-- 步骤1 - 开始 -->
+                <div class="nav-item active">
+                    <a href="#" class="bg-blue-50 border-2 border-blue-600 text-blue-700 rounded-lg p-4 font-medium flex items-center justify-between">
+                        <span>1. 开始</span>
+                        <i class="fas fa-check-circle text-blue-500"></i>
+                    </a>
+                </div>
+                
+                <!-- 步骤2 - AI生成 -->
+                <div class="nav-item">
+                    <a href="ai_generate.html" class="bg-white border border-gray-200 rounded-lg p-4 text-gray-700 hover:bg-gray-50">
+                        2. AI生成
+                    </a>
+                </div>
+                
+                <!-- 步骤3 - 人工确认 -->
+                <div class="nav-item">
+                    <a href="confirm_order.html" class="bg-white border border-gray-200 rounded-lg p-4 text-gray-700 hover:bg-gray-50">
+                        3. 人工确认
+                    </a>
+                </div>
+                
+                <!-- 步骤4 - 报销费用 -->
+                <div class="nav-item">
+                    <a href="page6.html" class="bg-white border border-gray-200 rounded-lg p-4 text-gray-700 hover:bg-gray-50">
+                        4. 报销费用
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 内容区 -->
+        <div class="flex-1">
+            <div class="bg-white border border-gray-200 rounded-lg p-8 content-container">
+                <h1 class="text-3xl font-bold text-gray-800 flex items-center">
+                    <svg width="45" height="45" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" class="mr-2">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M3.18335 6.00092C3.18335 3.93905 4.85482 2.26758 6.91668 2.26758C8.97855 2.26758 10.65 3.93905 10.65 6.00091V7.49935C11.2729 6.90161 12.1186 6.53425 13.05 6.53425C14.3242 6.53425 15.4379 7.22169 16.0403 8.24593C16.6573 7.6798 17.48 7.33425 18.3834 7.33425C19.6576 7.33425 20.7712 8.02169 21.3736 9.04593C21.9906 8.4798 22.8133 8.13424 23.7167 8.13424C25.6313 8.13424 27.1834 9.68632 27.1834 11.6009V20.4009C27.1834 24.2301 24.0792 27.3342 20.25 27.3342L10.65 27.3342H10.1167V27.3331C9.94161 27.3317 9.81393 27.3286 9.69806 27.3216C6.1985 27.1099 3.40768 24.3191 3.196 20.8195C3.18335 20.6104 3.18335 20.3628 3.18335 19.8676V6.00092Z" fill="url(#paint0_linear_25594_78403)"/>
+                        <mask id="mask0_25594_78403" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="3" y="2" width="25" height="26">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M3.18335 5.99994C3.18335 3.93808 4.85482 2.2666 6.91668 2.2666C8.97855 2.2666 10.65 3.93807 10.65 5.99994V7.49837C11.2729 6.90063 12.1186 6.53327 13.05 6.53327C14.3242 6.53327 15.4379 7.22072 16.0403 8.24496C16.6573 7.67882 17.48 7.33327 18.3834 7.33327C19.6576 7.33327 20.7712 8.02072 21.3736 9.04496C21.9906 8.47882 22.8133 8.13327 23.7167 8.13327C25.6313 8.13327 27.1834 9.68535 27.1834 11.5999V20.3999C27.1834 24.2291 24.0792 27.3333 20.25 27.3333L10.65 27.3333H10.1167V27.3321C9.94161 27.3308 9.81393 27.3276 9.69806 27.3206C6.1985 27.1089 3.40768 24.3181 3.196 20.8186C3.18335 20.6094 3.18335 20.3618 3.18335 19.8666V5.99994Z" fill="url(#paint1_linear_25594_78403)"/>
+                        </mask>
+                        <g mask="url(#mask0_25594_78403)">
+                            <g filter="url(#filter0_f_25594_78403)">
+                                <circle cx="3.58316" cy="1.86655" r="8.13333" fill="#FFD952"/>
+                            </g>
+                            <g filter="url(#filter1_f_25594_78403)">
+                                <ellipse cx="25.5834" cy="25.8666" rx="13.0667" ry="7.06667" fill="#315CD8"/>
+                            </g>
+                        </g>
+                        <path d="M5.58337 15.8671C5.58337 14.3586 5.58337 13.6044 6.052 13.1357C6.052 13.1357 6.052 13.1357 6.052 13.1357C6.52063 12.6671 7.27488 12.6671 8.78337 12.6671H21.5834C23.0919 12.6671 23.8461 12.6671 24.3147 13.1357C24.3147 13.1357 24.3147 13.1357 24.3147 13.1357C24.7834 13.6044 24.7834 14.3586 24.7834 15.8671C24.7834 20.1412 24.7834 22.2782 23.4556 23.606C23.4556 23.606 23.4556 23.606 23.4556 23.606C22.1278 24.9338 19.9908 24.9338 15.7167 24.9338H14.65C10.376 24.9338 8.23894 24.9338 6.91116 23.606C6.91116 23.606 6.91116 23.606 6.91115 23.606C5.58337 22.2782 5.58337 20.1412 5.58337 15.8671Z" fill="white"/>
+                        <path d="M12.7832 18.2672C12.7832 19.74 12.4499 20.9339 10.7832 20.9339C9.11654 20.9339 8.7832 19.7487 8.7832 18.2672C8.7832 16.7857 9.11654 15.6005 10.7832 15.6005C12.4499 15.6005 12.7832 16.7944 12.7832 18.2672Z" fill="url(#paint2_linear_25594_78403)"/>
+                        <path d="M21.5834 18.2672C21.5834 19.74 21.25 20.9339 19.5834 20.9339C17.9167 20.9339 17.5834 19.7487 17.5834 18.2672C17.5834 16.7857 17.9167 15.6005 19.5834 15.6005C21.25 15.6005 21.5834 16.7944 21.5834 18.2672Z" fill="url(#paint3_linear_25594_78403)"/>
+                        <defs>
+                            <filter id="filter0_f_25594_78403" x="-12.5502" y="-14.2668" width="32.2667" height="32.2667" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                                <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                                <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+                                <feGaussianBlur stdDeviation="4" result="effect1_foregroundBlur_25594_78403"/>
+                            </filter>
+                            <filter id="filter1_f_25594_78403" x="4.51672" y="10.7999" width="42.1333" height="30.1334" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                                <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                                <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+                                <feGaussianBlur stdDeviation="4" result="effect1_foregroundBlur_25594_78403"/>
+                            </filter>
+                            <linearGradient id="paint0_linear_25594_78403" x1="6.61157" y1="1.46758" x2="23.4871" y2="27.1623" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#F14C74"/>
+                                <stop offset="0.961703" stop-color="#C44EE2"/>
+                            </linearGradient>
+                            <linearGradient id="paint1_linear_25594_78403" x1="6.61157" y1="1.4666" x2="23.4871" y2="27.1613" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#F14C74"/>
+                                <stop offset="0.961703" stop-color="#C44EE2"/>
+                            </linearGradient>
+                            <linearGradient id="paint2_linear_25594_78403" x1="10.7832" y1="15.6005" x2="10.7832" y2="20.9339" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#2C2B30"/>
+                                <stop offset="1" stop-color="#5F6067"/>
+                            </linearGradient>
+                            <linearGradient id="paint3_linear_25594_78403" x1="19.5834" y1="15.6005" x2="19.5834" y2="20.9339" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#2C2B30"/>
+                                <stop offset="1" stop-color="#5F6067"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    AI差旅 一站式差旅系统
+                </h1>
+                <p class="mt-3 text-lg text-gray-600">
+                    智能出差申请与报销，助你轻松完成差旅手续
+                </p>
+                
+                <!-- 功能引导介绍 -->
+                <div class="mt-6 grid grid-cols-1 gap-3">
+                    <!-- 智能申请单 -->
+                    <div class="bg-blue-50 rounded-lg p-3 border border-blue-100 shadow-sm feature-card">
+                        <div class="flex items-center">
+                            <div class="bg-yellow-100 rounded-full p-2 mr-2">
+                                <i class="fas fa-lightbulb text-yellow-500"></i>
+                            </div>
+                            <h2 class="text-base font-medium text-gray-800">智能申请单</h2>
+                            <div class="border-l border-blue-200 h-5 mx-3"></div>
+                            <p class="text-sm text-gray-600">一句话自动生成符合公司标准的差旅申请单</p>
+                        </div>
+                    </div>
+                    
+                    <!-- 智能交通推荐 -->
+                    <div class="bg-blue-50 rounded-lg p-3 border border-blue-100 shadow-sm feature-card">
+                        <div class="flex items-center">
+                            <div class="bg-blue-100 rounded-full p-2 mr-2">
+                                <i class="fas fa-plane text-blue-500"></i>
+                            </div>
+                            <h2 class="text-base font-medium text-gray-800">智能交通推荐</h2>
+                            <div class="border-l border-blue-200 h-5 mx-3"></div>
+                            <p class="text-sm text-gray-600">多智能体聚合推荐最合适的交通方案</p>
+                        </div>
+                    </div>
+                    
+                    <!-- 智能酒店推荐 -->
+                    <div class="bg-blue-50 rounded-lg p-3 border border-blue-100 shadow-sm feature-card">
+                        <div class="flex items-center">
+                            <div class="bg-purple-100 rounded-full p-2 mr-2">
+                                <i class="fas fa-hotel text-purple-500"></i>
+                            </div>
+                            <h2 class="text-base font-medium text-gray-800">智能酒店推荐</h2>
+                            <div class="border-l border-blue-200 h-5 mx-3"></div>
+                            <p class="text-sm text-gray-600">多智能体聚合推荐最合适的标准酒店</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 交互区 -->
+                <div class="mt-6 bg-white rounded-lg shadow p-6 border border-gray-100 flex-grow" style="min-height: 350px;">
+                    <div class="mb-4 text-xl font-semibold text-gray-700">
+                        <span class="text-yellow-500 mr-2">👋</span>
+                        Hello, 我是 AI差旅助手
+                    </div>
+                    <div class="mt-4 mb-6">
+                        <textarea 
+                            id="travelInput"
+                            class="w-full px-4 py-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                            rows="6" 
+                            placeholder="请输入你的差旅起止地点和起止时间。"
+                        ></textarea>
+                    </div>
+                    
+                    <!-- 新增示例区域 -->
+                    <div class="mt-3 bg-blue-50 rounded-lg p-3 border border-blue-100">
+                        <div class="flex items-center text-sm text-gray-600 mb-2">
+                            <i class="fas fa-lightbulb text-yellow-500 mr-2"></i>
+                            <span>示例（点击文本可复制到输入框）：</span>
+                        </div>
+                        <div class="relative">
+                            <div id="exampleText" class="example-text p-2 rounded-lg text-blue-700 font-medium">
+                                明天下午我要从北京到深圳的深圳大学出差，时间从明天到大后天。
+                            </div>
+                            <div id="copyTooltip" class="copy-tooltip">已复制到输入框</div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-5 flex justify-end">
+                        <a href="ai_generate.html" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-8 rounded-lg flex items-center">
+                            <i class="fas fa-magic mr-2"></i>
+                            开始AI生成
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // 点击示例文本复制到输入框
+        document.getElementById('exampleText').addEventListener('click', function() {
+            const textarea = document.getElementById('travelInput');
+            const exampleText = this.innerText;
+            textarea.value = exampleText;
+            textarea.focus();
+            
+            // 显示复制提示
+            const tooltip = document.getElementById('copyTooltip');
+            tooltip.style.top = (this.offsetTop - 30) + 'px';
+            tooltip.style.left = (this.offsetWidth / 2 + this.offsetLeft) + 'px';
+            tooltip.classList.add('show');
+            
+            // 3秒后隐藏提示
+            setTimeout(function() {
+                tooltip.classList.remove('show');
+            }, 3000);
+        });
+    </script>
+</body>
+</html> 
