@@ -223,15 +223,23 @@
                 </div>
                 
                 <!-- AI状态提示条 -->
-                <div id="aiStatusBar" class="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-6 flex items-center justify-between relative overflow-hidden">
-                    <div class="flex items-center flex-grow">
-                        <svg width="24" height="24" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" class="mr-3 animate-pulse">
+                <div id="aiStatusBar" class="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-6 relative transition-all duration-500" style="min-height: 80px; max-height: 160px;">
+                    <div class="flex items-start">
+                        <svg width="24" height="24" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" class="mr-3 animate-pulse flex-shrink-0 mt-1">
                             <path fill-rule="evenodd" clip-rule="evenodd" d="M3.18335 6.00092C3.18335 3.93905 4.85482 2.26758 6.91668 2.26758C8.97855 2.26758 10.65 3.93905 10.65 6.00091V7.49935C11.2729 6.90161 12.1186 6.53425 13.05 6.53425C14.3242 6.53425 15.4379 7.22169 16.0403 8.24593C16.6573 7.6798 17.48 7.33425 18.3834 7.33425C19.6576 7.33425 20.7712 8.02169 21.3736 9.04593C21.9906 8.4798 22.8133 8.13424 23.7167 8.13424C25.6313 8.13424 27.1834 9.68632 27.1834 11.6009V20.4009C27.1834 24.2301 24.0792 27.3342 20.25 27.3342L10.65 27.3342H10.1167V27.3331C9.94161 27.3317 9.81393 27.3286 9.69806 27.3216C6.1985 27.1099 3.40768 24.3191 3.196 20.8195C3.18335 20.6104 3.18335 20.3628 3.18335 19.8676V6.00092Z" fill="#3b82f6"/>
                         </svg>
                         <div class="flex-grow">
-                            <p class="font-medium text-blue-800" id="aiStatusText">AI分析完成，请手动查看和确认各项推荐方案</p>
-                            <div class="w-full h-1.5 bg-blue-100 rounded-full mt-1 overflow-hidden">
-                                <div id="aiProgressBar" class="h-full bg-blue-500 rounded-full" style="width: 100%"></div>
+                            <!-- 固定的主状态文本 -->
+                            <p class="font-medium text-blue-800" id="aiStatusText">申请单Agent分析中</p>
+                            
+                            <!-- 可滚动的分析日志区域 -->
+                            <div id="aiStatusContent" class="overflow-y-auto mt-2" style="max-height: 80px;">
+                                <div id="aiAnalysisLog" class="space-y-1 text-sm text-blue-700"></div>
+                            </div>
+                            
+                            <!-- 进度条 -->
+                            <div class="w-full h-1.5 bg-blue-100 rounded-full mt-2 overflow-hidden">
+                                <div id="aiProgressBar" class="h-full bg-blue-500 rounded-full transition-all duration-300" style="width: 20%"></div>
                             </div>
                         </div>
                     </div>
@@ -241,138 +249,193 @@
                 
                 <!-- 申请单内容 -->
                 <div id="tab-content-1" class="tab-content active">
-                    <p class="mt-3 text-lg text-gray-600 mb-6">
-                        根据您当前录入的内容，已帮您自动生成申请单。请确认～
-                    </p>
+                    <!-- 加载状态占位符 -->
+                    <div id="applicationLoadingState" class="animate-pulse">
+                        <div class="mt-3 h-6 bg-gray-200 rounded mb-6 w-3/4"></div>
 
-                    <!-- 出发地-目的地 -->
-                    <div class="bg-gray-50 p-6 rounded-lg mb-6">
-                        <div class="flex items-center justify-center text-xl font-medium">
-                            <span class="text-gray-800">北京</span>
-                            <svg class="w-8 h-8 mx-6 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                            </svg>
-                            <span class="text-gray-800">深圳</span>
+                        <!-- 出发地-目的地占位 -->
+                        <div class="bg-gray-200 p-6 rounded-lg mb-6 h-20"></div>
+
+                        <!-- 日期信息占位 -->
+                        <div class="grid grid-cols-3 gap-6 mb-6">
+                            <div class="bg-gray-200 p-4 rounded-lg h-16"></div>
+                            <div class="bg-gray-200 p-4 rounded-lg h-16"></div>
+                            <div class="bg-gray-200 p-4 rounded-lg h-16"></div>
+                        </div>
+
+                        <!-- 行程明细占位 -->
+                        <div class="bg-gray-200 rounded-lg p-5 mb-6 h-48"></div>
+
+                        <div class="flex justify-end">
+                            <div class="bg-gray-200 rounded-lg h-10 w-40"></div>
                         </div>
                     </div>
 
-                    <!-- 日期信息 -->
-                    <div class="grid grid-cols-3 gap-6 mb-6">
-                        <div class="bg-gray-50 p-4 rounded-lg">
-                            <p class="text-sm text-gray-500 mb-1">开始日期</p>
-                            <p class="text-lg font-medium">2025-05-14</p>
-                        </div>
-                        <div class="bg-gray-50 p-4 rounded-lg text-center">
-                            <p class="text-sm text-gray-500 mb-1">出差天数</p>
-                            <p class="text-lg font-medium">3天</p>
-                        </div>
-                        <div class="bg-gray-50 p-4 rounded-lg text-right">
-                            <p class="text-sm text-gray-500 mb-1">结束日期</p>
-                            <p class="text-lg font-medium">2025-05-16</p>
-                        </div>
-                    </div>
+                    <!-- 真实内容（初始隐藏） -->
+                    <div id="applicationRealContent" class="hidden opacity-0 transition-opacity duration-500">
+                        <p class="mt-3 text-lg text-gray-600 mb-6">
+                            根据您当前录入的内容，已帮您自动生成申请单。请确认～
+                        </p>
 
-                    <!-- 行程明细 -->
-                    <div class="bg-white border border-gray-200 rounded-lg p-5 mb-6">
-                        <h3 class="text-lg font-medium text-gray-800 mb-4">出差行程明细信息</h3>
-                        <ul class="space-y-4">
-                            <li class="journey-item py-2 border-b border-gray-100">
-                                <div class="flex justify-between">
-                                    <span class="text-gray-800">2025-05-14</span>
-                                    <span class="text-blue-600">1天</span>
-                                </div>
-                                <div class="flex items-center text-gray-600 mt-1">
-                                    <span>北京</span>
-                                    <i class="fas fa-long-arrow-alt-right mx-2 text-gray-400"></i>
-                                    <span>深圳</span>
-                                </div>
-                            </li>
-                            <li class="journey-item py-2 border-b border-gray-100">
-                                <div class="flex justify-between">
-                                    <span class="text-gray-800">2025-05-15</span>
-                                    <span class="text-blue-600">1天</span>
-                                </div>
-                                <div class="flex items-center text-gray-600 mt-1">
-                                    <span>深圳</span>
-                                    <i class="fas fa-location-dot mx-2 text-gray-400"></i>
-                                    <span>深圳大学</span>
-                                </div>
-                            </li>
-                            <li class="journey-item py-2">
-                                <div class="flex justify-between">
-                                    <span class="text-gray-800">2025-05-16</span>
-                                    <span class="text-blue-600">1天</span>
-                                </div>
-                                <div class="flex items-center text-gray-600 mt-1">
-                                    <span>深圳</span>
-                                    <i class="fas fa-long-arrow-alt-right mx-2 text-gray-400"></i>
-                                    <span>北京</span>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
+                        <!-- 出发地-目的地 -->
+                        <div class="bg-gray-50 p-6 rounded-lg mb-6">
+                            <div class="flex items-center justify-center text-xl font-medium">
+                                <span class="text-gray-800">上海</span>
+                                <svg class="w-8 h-8 mx-6 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                </svg>
+                                <span class="text-gray-800">北京</span>
+                            </div>
+                        </div>
 
-                    <div class="flex justify-end">
-                        <button id="next-to-transport" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-8 rounded-lg flex items-center">
-                            下一步：交通推荐
-                            <i class="fas fa-arrow-right ml-2"></i>
-                        </button>
+                        <!-- 日期信息 -->
+                        <div class="grid grid-cols-3 gap-6 mb-6">
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <p class="text-sm text-gray-500 mb-1">开始日期</p>
+                                <p class="text-lg font-medium">2025-08-07</p>
+                            </div>
+                            <div class="bg-gray-50 p-4 rounded-lg text-center">
+                                <p class="text-sm text-gray-500 mb-1">出差天数</p>
+                                <p class="text-lg font-medium">2天</p>
+                            </div>
+                            <div class="bg-gray-50 p-4 rounded-lg text-right">
+                                <p class="text-sm text-gray-500 mb-1">结束日期</p>
+                                <p class="text-lg font-medium">2025-08-08</p>
+                            </div>
+                        </div>
+
+                        <!-- 行程明细 -->
+                        <div class="bg-white border border-gray-200 rounded-lg p-5 mb-6">
+                            <h3 class="text-lg font-medium text-gray-800 mb-4">出差行程明细信息</h3>
+                            <ul class="space-y-4">
+                                <li class="journey-item py-2 border-b border-gray-100">
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-800">2025-08-07</span>
+                                        <span class="text-blue-600">1天</span>
+                                    </div>
+                                    <div class="flex items-center text-gray-600 mt-1">
+                                        <span>上海</span>
+                                        <i class="fas fa-long-arrow-alt-right mx-2 text-gray-400"></i>
+                                        <span>北京</span>
+                                    </div>
+                                </li>
+                                <li class="journey-item py-2 border-b border-gray-100">
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-800">2025-08-08</span>
+                                        <span class="text-blue-600">1天</span>
+                                    </div>
+                                    <div class="flex items-center text-gray-600 mt-1">
+                                        <span>北京</span>
+                                        <i class="fas fa-location-dot mx-2 text-gray-400"></i>
+                                        <span>国家会议中心</span>
+                                    </div>
+                                </li>
+                                <li class="journey-item py-2">
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-800">2025-08-08</span>
+                                        <span class="text-blue-600">1天</span>
+                                    </div>
+                                    <div class="flex items-center text-gray-600 mt-1">
+                                        <span>北京</span>
+                                        <i class="fas fa-long-arrow-alt-right mx-2 text-gray-400"></i>
+                                        <span>上海</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="flex justify-end">
+                            <button id="next-to-transport" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-8 rounded-lg flex items-center">
+                                下一步：交通推荐
+                                <i class="fas fa-arrow-right ml-2"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
                 
                 <!-- 交通推荐内容 -->
                 <div id="tab-content-2" class="tab-content">
-                    <p class="mt-3 text-lg text-gray-600 mb-6">
-                        根据您当前目的地位置、天气、距离还有单位报销额，多个Agent已帮您汇总推荐以下最优交通方式。
-                    </p>
+                    <!-- 加载状态占位符 -->
+                    <div id="transportLoadingState" class="animate-pulse">
+                        <div class="mt-3 h-6 bg-gray-200 rounded mb-6 w-4/5"></div>
 
-                    <!-- 天气预报 -->
-                    <div class="mb-6">
-                        <h3 class="text-lg font-medium text-gray-800 mb-3">深圳未来3天天气预报</h3>
-                        <div class="grid grid-cols-3 gap-4">
-                            <div class="bg-gradient-to-br from-blue-50 to-sky-50 rounded-lg p-4 flex flex-col items-center">
-                                <p class="text-gray-500 mb-1">2025-05-14</p>
-                                <div class="text-yellow-500 text-3xl mb-1">
-                                    <i class="fas fa-sun"></i>
-                                </div>
-                                <p class="text-gray-700 font-medium">晴天</p>
-                                <p class="text-sm text-gray-500 mt-1">25°C-30°C</p>
-                            </div>
-                            <div class="bg-gradient-to-br from-blue-50 to-sky-50 rounded-lg p-4 flex flex-col items-center">
-                                <p class="text-gray-500 mb-1">2025-05-15</p>
-                                <div class="text-yellow-500 text-3xl mb-1">
-                                    <i class="fas fa-sun"></i>
-                                </div>
-                                <p class="text-gray-700 font-medium">晴天</p>
-                                <p class="text-sm text-gray-500 mt-1">24°C-31°C</p>
-                            </div>
-                            <div class="bg-gradient-to-br from-blue-50 to-sky-50 rounded-lg p-4 flex flex-col items-center">
-                                <p class="text-gray-500 mb-1">2025-05-16</p>
-                                <div class="text-yellow-500 text-3xl mb-1">
-                                    <i class="fas fa-sun"></i>
-                                </div>
-                                <p class="text-gray-700 font-medium">晴天</p>
-                                <p class="text-sm text-gray-500 mt-1">26°C-32°C</p>
+                        <!-- 天气预报占位 -->
+                        <div class="mb-6">
+                            <div class="h-6 bg-gray-200 rounded mb-3 w-40"></div>
+                            <div class="grid grid-cols-3 gap-4">
+                                <div class="bg-gray-200 rounded-lg h-24"></div>
+                                <div class="bg-gray-200 rounded-lg h-24"></div>
+                                <div class="bg-gray-200 rounded-lg h-24"></div>
                             </div>
                         </div>
+
+                        <!-- 交通方式选择占位 -->
+                        <div class="mb-5">
+                            <div class="h-6 bg-gray-200 rounded mb-3 w-32"></div>
+                            <div class="flex border-b border-gray-200">
+                                <div class="h-10 bg-gray-200 rounded-t w-20 mr-4"></div>
+                                <div class="h-10 bg-gray-200 rounded-t w-20"></div>
+                            </div>
+                        </div>
+
+                        <!-- 航班列表占位 -->
+                        <div class="space-y-3">
+                            <div class="bg-gray-200 rounded-lg h-32"></div>
+                            <div class="bg-gray-200 rounded-lg h-32"></div>
+                            <div class="bg-gray-200 rounded-lg h-32"></div>
+                        </div>
+
+                        <div class="flex justify-end mt-6">
+                            <div class="bg-gray-200 rounded-lg h-10 w-32 mr-3"></div>
+                            <div class="bg-gray-200 rounded-lg h-10 w-40"></div>
+                        </div>
+                    </div>
+
+                    <!-- 真实内容（初始隐藏） -->
+                    <div id="transportRealContent" class="hidden opacity-0 transition-opacity duration-500">
+                        <p class="mt-3 text-lg text-gray-600 mb-6">
+                            根据您当前目的地位置、天气、距离还有单位报销额，多个Agent已帮您汇总推荐以下最优交通方式。
+                        </p>
+
+                        <!-- 天气预报 -->
+                        <div class="mb-6">
+                            <h3 class="text-lg font-medium text-gray-800 mb-3">北京未来2天天气预报</h3>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="bg-gradient-to-br from-blue-50 to-sky-50 rounded-lg p-4 flex flex-col items-center">
+                                    <p class="text-gray-500 mb-1">2025-08-07</p>
+                                    <div class="text-yellow-500 text-3xl mb-1">
+                                        <i class="fas fa-sun"></i>
+                                    </div>
+                                    <p class="text-gray-700 font-medium">晴天</p>
+                                    <p class="text-sm text-gray-500 mt-1">28°C-35°C</p>
+                                </div>
+                                <div class="bg-gradient-to-br from-blue-50 to-sky-50 rounded-lg p-4 flex flex-col items-center">
+                                    <p class="text-gray-500 mb-1">2025-08-08</p>
+                                    <div class="text-yellow-500 text-3xl mb-1">
+                                        <i class="fas fa-sun"></i>
+                                    </div>
+                                    <p class="text-gray-700 font-medium">晴天</p>
+                                    <p class="text-sm text-gray-500 mt-1">27°C-34°C</p>
+                                </div>
+                            </div>
                     </div>
 
                     <!-- 交通方式选择 -->
                     <div class="mb-5">
                         <h3 class="text-lg font-medium text-gray-800 mb-3">推荐交通方式</h3>
                         <div class="flex border-b border-gray-200">
-                            <button id="tab-plane" class="py-2 px-4 border-b-2 border-blue-500 text-blue-600 font-medium flex items-center transport-tab active">
+                            <button id="tab-plane" class="py-2 px-4 text-gray-600 font-medium flex items-center transport-tab">
                                 <i class="fas fa-plane mr-2"></i>飞机
-                                <span class="ml-2 text-xs bg-blue-100 text-blue-600 py-0.5 px-1.5 rounded">推荐</span>
                             </button>
-                            <button id="tab-train" class="py-2 px-4 text-gray-600 font-medium flex items-center transport-tab">
+                            <button id="tab-train" class="py-2 px-4 border-b-2 border-blue-500 text-blue-600 font-medium flex items-center transport-tab active">
                                 <i class="fas fa-train mr-2"></i>高铁
+                                <span class="ml-2 text-xs bg-blue-100 text-blue-600 py-0.5 px-1.5 rounded">推荐</span>
                             </button>
                         </div>
                     </div>
 
                     <!-- 飞机列表 -->
-                    <div id="content-plane" class="transport-content active">
+                    <div id="content-plane" class="transport-content hidden">
                         <div class="bg-white border-2 border-green-500 rounded-lg p-4 mb-3 shadow-md relative">
                             <!-- AI推荐标签 -->
                             <div class="absolute -top-3 -right-3 bg-green-500 text-white px-3 py-1 rounded-lg shadow-md flex items-center">
@@ -385,25 +448,25 @@
                             <div class="flex justify-between items-center mb-2">
                                 <div class="flex items-center">
                                     <img src="https://picsum.photos/id/24/30/30" alt="航空公司" class="w-8 h-8 rounded-full mr-2">
-                                    <span class="font-medium">南方航空 CZ3456</span>
+                                    <span class="font-medium">东方航空 MU5137</span>
                                 </div>
-                                <div class="text-xl font-bold text-red-500">¥780</div>
+                                <div class="text-xl font-bold text-red-500">¥650</div>
                             </div>
                             <div class="flex justify-between items-center mt-3">
                                 <div class="text-center">
-                                    <div class="text-lg font-medium">08:30</div>
-                                    <div class="text-sm text-gray-500">北京首都机场 T2</div>
+                                    <div class="text-lg font-medium">08:00</div>
+                                    <div class="text-sm text-gray-500">上海浦东机场 T1</div>
                                 </div>
                                 <div class="flex flex-col items-center mx-4">
-                                    <div class="text-sm text-gray-500">2小时30分钟</div>
+                                    <div class="text-sm text-gray-500">2小时10分钟</div>
                                     <div class="w-24 h-0.5 bg-gray-300 relative my-1">
                                         <div class="absolute -top-1.5 right-0 w-3 h-3 transform rotate-45 border-t-2 border-r-2 border-gray-300"></div>
                                     </div>
                                     <div class="text-xs text-gray-500">直飞</div>
                                 </div>
                                 <div class="text-center">
-                                    <div class="text-lg font-medium">11:00</div>
-                                    <div class="text-sm text-gray-500">深圳宝安机场 T3</div>
+                                    <div class="text-lg font-medium">10:10</div>
+                                    <div class="text-sm text-gray-500">北京首都机场 T2</div>
                                 </div>
                             </div>
                             <div class="mt-2 bg-green-50 rounded-lg p-2 border border-green-100">
@@ -470,32 +533,46 @@
                     </div>
 
                     <!-- 高铁列表 -->
-                    <div id="content-train" class="transport-content hidden">
-                        <div class="bg-white border border-gray-200 rounded-lg p-4 mb-3">
+                    <div id="content-train" class="transport-content active">
+                        <div class="bg-white border-2 border-green-500 rounded-lg p-4 mb-3 shadow-md relative">
+                            <!-- AI推荐标签 -->
+                            <div class="absolute -top-3 -right-3 bg-green-500 text-white px-3 py-1 rounded-lg shadow-md flex items-center">
+                                <svg width="20" height="20" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" class="mr-1">
+                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M3.18335 6.00092C3.18335 3.93905 4.85482 2.26758 6.91668 2.26758C8.97855 2.26758 10.65 3.93905 10.65 6.00091V7.49935C11.2729 6.90161 12.1186 6.53425 13.05 6.53425C14.3242 6.53425 15.4379 7.22169 16.0403 8.24593C16.6573 7.6798 17.48 7.33425 18.3834 7.33425C19.6576 7.33425 20.7712 8.02169 21.3736 9.04593C21.9906 8.4798 22.8133 8.13424 23.7167 8.13424C25.6313 8.13424 27.1834 9.68632 27.1834 11.6009V20.4009C27.1834 24.2301 24.0792 27.3342 20.25 27.3342L10.65 27.3342H10.1167V27.3331C9.94161 27.3317 9.81393 27.3286 9.69806 27.3216C6.1985 27.1099 3.40768 24.3191 3.196 20.8195C3.18335 20.6104 3.18335 20.3628 3.18335 19.8676V6.00092Z" fill="white"/>
+                                </svg>
+                                <span class="font-bold">AI推荐</span>
+                            </div>
+                            
                             <div class="flex justify-between items-center mb-2">
                                 <div class="flex items-center">
                                     <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 mr-2">
                                         <i class="fas fa-train"></i>
                                     </div>
-                                    <span class="font-medium">G123 高铁</span>
+                                    <span class="font-medium">G16 高铁</span>
                                 </div>
                                 <div class="text-xl font-bold text-red-500">¥553</div>
                             </div>
                             <div class="flex justify-between items-center mt-3">
                                 <div class="text-center">
-                                    <div class="text-lg font-medium">09:15</div>
-                                    <div class="text-sm text-gray-500">北京南站</div>
+                                    <div class="text-lg font-medium">08:00</div>
+                                    <div class="text-sm text-gray-500">上海虹桥站</div>
                                 </div>
                                 <div class="flex flex-col items-center mx-4">
-                                    <div class="text-sm text-gray-500">5小时40分钟</div>
+                                    <div class="text-sm text-gray-500">4小时41分钟</div>
                                     <div class="w-24 h-0.5 bg-gray-300 relative my-1">
                                         <div class="absolute -top-1.5 right-0 w-3 h-3 transform rotate-45 border-t-2 border-r-2 border-gray-300"></div>
                                     </div>
                                     <div class="text-xs text-gray-500">直达</div>
                                 </div>
                                 <div class="text-center">
-                                    <div class="text-lg font-medium">14:55</div>
-                                    <div class="text-sm text-gray-500">深圳北站</div>
+                                    <div class="text-lg font-medium">12:41</div>
+                                    <div class="text-sm text-gray-500">北京南站</div>
+                                </div>
+                            </div>
+                            <div class="mt-2 bg-green-50 rounded-lg p-2 border border-green-100">
+                                <div class="text-sm text-green-700">
+                                    <i class="fas fa-check-circle mr-1"></i>
+                                    AI分析：时间最优选择，舒适度高，价格合理
                                 </div>
                             </div>
                         </div>
@@ -506,63 +583,159 @@
                                     <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 mr-2">
                                         <i class="fas fa-train"></i>
                                     </div>
-                                    <span class="font-medium">G234 高铁</span>
+                                    <span class="font-medium">G110 高铁</span>
                                 </div>
                                 <div class="text-xl font-bold text-red-500">¥553</div>
                             </div>
                             <div class="flex justify-between items-center mt-3">
                                 <div class="text-center">
-                                    <div class="text-lg font-medium">11:20</div>
-                                    <div class="text-sm text-gray-500">北京南站</div>
+                                    <div class="text-lg font-medium">10:00</div>
+                                    <div class="text-sm text-gray-500">上海虹桥站</div>
                                 </div>
                                 <div class="flex flex-col items-center mx-4">
-                                    <div class="text-sm text-gray-500">5小时35分钟</div>
+                                    <div class="text-sm text-gray-500">5小时54分钟</div>
                                     <div class="w-24 h-0.5 bg-gray-300 relative my-1">
                                         <div class="absolute -top-1.5 right-0 w-3 h-3 transform rotate-45 border-t-2 border-r-2 border-gray-300"></div>
                                     </div>
                                     <div class="text-xs text-gray-500">直达</div>
                                 </div>
                                 <div class="text-center">
-                                    <div class="text-lg font-medium">16:55</div>
-                                    <div class="text-sm text-gray-500">深圳北站</div>
+                                    <div class="text-lg font-medium">15:54</div>
+                                    <div class="text-sm text-gray-500">北京南站</div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="flex justify-end mt-6">
-                        <button id="back-to-application" class="border border-gray-300 bg-white hover:bg-gray-50 text-gray-700 font-medium py-2.5 px-6 rounded-lg flex items-center mr-3">
-                            <i class="fas fa-arrow-left mr-2"></i>
-                            上一步：申请单
-                        </button>
-                        <button id="next-to-hotel" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-8 rounded-lg flex items-center">
-                            下一步：酒店推荐
-                            <i class="fas fa-arrow-right ml-2"></i>
-                        </button>
-                    </div>
-                </div>
+                        <div class="flex justify-end mt-6">
+                            <button id="back-to-application" class="border border-gray-300 bg-white hover:bg-gray-50 text-gray-700 font-medium py-2.5 px-6 rounded-lg flex items-center mr-3">
+                                <i class="fas fa-arrow-left mr-2"></i>
+                                上一步：申请单
+                            </button>
+                            <button id="next-to-hotel" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-8 rounded-lg flex items-center">
+                                下一步：酒店推荐
+                                <i class="fas fa-arrow-right ml-2"></i>
+                            </button>
+                        </div>
+                    </div> <!-- 结束 transportRealContent -->
+                </div> <!-- 结束 tab-content-2 -->
                 
                 <!-- 酒店推荐内容 -->
                 <div id="tab-content-3" class="tab-content">
-                    <p class="mt-3 text-lg text-gray-600 mb-6">
-                        根据您的目的地位置、行程和公司出差标准，已为您筛选出最合适的酒店推荐。
-                    </p>
+                    <!-- 加载状态占位符 -->
+                    <div id="hotelLoadingState" class="animate-pulse">
+                        <div class="mt-3 h-6 bg-gray-200 rounded mb-6 w-4/5"></div>
 
-                    <!-- 地图预览 -->
-                    <div class="mb-6">
-                        <h3 class="text-lg font-medium text-gray-800 mb-3">目的地位置概览</h3>
-                        <div class="bg-gray-200 rounded-lg h-56 relative overflow-hidden">
-                            <img src="https://picsum.photos/id/1031/1200/300" alt="地图" class="object-cover w-full h-full">
-                            <div class="absolute bottom-3 right-3 bg-white rounded-lg shadow-md p-3">
-                                <p class="text-sm font-medium">深圳大学</p>
-                                <p class="text-xs text-gray-500">距离市中心 8.5 公里</p>
+                        <!-- 地图预览占位 -->
+                        <div class="mb-6">
+                            <div class="h-6 bg-gray-200 rounded mb-3 w-32"></div>
+                            <div class="bg-gray-200 rounded-lg h-56"></div>
+                        </div>
+
+                        <!-- 酒店分类占位 -->
+                        <div class="mb-5">
+                            <div class="h-6 bg-gray-200 rounded mb-3 w-24"></div>
+                            <div class="flex border-b border-gray-200">
+                                <div class="h-10 bg-gray-200 rounded-t w-32 mr-4"></div>
+                                <div class="h-10 bg-gray-200 rounded-t w-24"></div>
                             </div>
+                        </div>
+
+                        <!-- 酒店列表占位 -->
+                        <div class="space-y-4">
+                            <div class="bg-gray-200 rounded-lg h-48"></div>
+                            <div class="bg-gray-200 rounded-lg h-48"></div>
+                        </div>
+
+                        <div class="flex justify-end mt-6">
+                            <div class="bg-gray-200 rounded-lg h-10 w-32 mr-3"></div>
+                            <div class="bg-gray-200 rounded-lg h-10 w-40"></div>
                         </div>
                     </div>
 
-                    <!-- 酒店分类 -->
-                    <div class="mb-5">
-                        <h3 class="text-lg font-medium text-gray-800 mb-3">推荐酒店</h3>
+                    <!-- 真实内容（初始隐藏） -->
+                    <div id="hotelRealContent" class="hidden opacity-0 transition-opacity duration-500">
+                        <p class="mt-3 text-lg text-gray-600 mb-6">
+                            根据您的目的地位置、行程和公司出差标准，已为您筛选出最合适的酒店推荐。
+                        </p>
+
+                        <!-- 地图预览 -->
+                        <div class="mb-6">
+                            <h3 class="text-lg font-medium text-gray-800 mb-3">国家会议中心附近酒店分布</h3>
+                            <div class="bg-gray-100 rounded-lg h-64 relative overflow-hidden border border-gray-200">
+                                <!-- 使用百度地图静态地图API -->
+                                <div id="baiduMapContainer" class="w-full h-full relative">
+                                    <!-- 主地图图片 -->
+                                    <img 
+                                        src="https://api.map.baidu.com/staticimage/v2?ak=2bTSEtGSuLJXkmt7rLX4PqWG&center=116.389445,40.002893&width=1200&height=256&zoom=13&dpiType=ph&markers=116.389445,40.002893|116.459308,39.918058|116.382993,39.990478|116.461347,39.920514|116.389945,40.005893|116.387945,40.001893&markerStyles=l,A,0xff0000,0xffff00,国家会议中心|m,B,0x00ff00,0xffffff,国贸|m,C,0x0066ff,0xffffff,北辰|m,D,0x0066ff,0xffffff,康莱德|m,E,0x0066ff,0xffffff,德全|m,F,0x0066ff,0xffffff,会议酒店"
+                                        alt="国家会议中心附近酒店分布地图" 
+                                        class="w-full h-full object-cover"
+                                        onload="handleBaiduMapSuccess()"
+                                        onerror="handleBaiduMapError()">
+                                    
+                                    <!-- 备用地图方案（如果百度地图加载失败） -->
+                                    <div id="mapFallback" class="absolute inset-0 bg-gradient-to-br from-blue-100 to-green-100 hidden">
+                                        <div class="w-full h-full flex items-center justify-center">
+                                            <div class="text-center">
+                                                <div class="mb-4">
+                                                    <i class="fas fa-map-marked-alt text-5xl text-blue-600"></i>
+                                                </div>
+                                                <h4 class="text-lg font-semibold text-gray-800 mb-2">智能地图导航</h4>
+                                                <p class="text-sm text-gray-600 mb-4">国家会议中心 (116.389445, 40.002893)</p>
+                                                <div class="space-y-2 text-xs">
+                                                    <div class="flex items-center justify-center">
+                                                        <span class="w-3 h-3 bg-red-500 rounded-full mr-2"></span>
+                                                        <span>🅰 国家会议中心 (目的地)</span>
+                                                    </div>
+                                                    <div class="flex items-center justify-center">
+                                                        <span class="w-3 h-3 bg-green-500 rounded-full mr-2"></span>
+                                                        <span>🅱 北京国贸大酒店 (AI推荐)</span>
+                                                    </div>
+                                                    <div class="flex items-center justify-center">
+                                                        <span class="w-3 h-3 bg-blue-500 rounded-full mr-2"></span>
+                                                        <span>Ⓒ-Ⓕ 其他推荐酒店</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- 智能地图操作面板 -->
+                                <div class="absolute top-3 right-3 bg-white bg-opacity-90 rounded-lg shadow-md p-2">
+                                    <button onclick="openBaiduMap()" class="text-xs text-blue-600 hover:text-blue-800 flex items-center">
+                                        <i class="fas fa-external-link-alt mr-1"></i>
+                                        在百度地图中查看
+                                    </button>
+                                </div>
+                                
+                                <!-- 图例覆盖层 -->
+                                <div class="absolute bottom-3 left-3 bg-white bg-opacity-90 rounded-lg shadow-md p-3">
+                                    <div class="text-xs font-medium mb-2">图例说明</div>
+                                    <div class="flex items-center mb-1">
+                                        <div class="w-3 h-3 bg-green-600 rounded-full mr-2"></div>
+                                        <span class="text-xs">🅱 AI推荐酒店</span>
+                                    </div>
+                                    <div class="flex items-center mb-1">
+                                        <div class="w-3 h-3 bg-blue-600 rounded-full mr-2"></div>
+                                        <span class="text-xs">Ⓒ 其他酒店</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <div class="w-3 h-3 bg-red-600 rounded-full mr-2"></div>
+                                        <span class="text-xs">🅰 国家会议中心</span>
+                                    </div>
+                                </div>
+                                
+                                <!-- 百度地图定位信息 -->
+                                <div class="absolute top-1/4 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white px-2 py-1 rounded text-xs">
+                                    百度地图精确定位：116.389445, 40.002893
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 酒店分类 -->
+                        <div class="mb-5">
+                            <h3 class="text-lg font-medium text-gray-800 mb-3">推荐酒店</h3>
                         <div class="flex border-b border-gray-200">
                             <button id="tab-standard" class="py-2 px-4 border-b-2 border-blue-500 text-blue-600 font-medium flex items-center hotel-tab active">
                                 <i class="fas fa-star mr-2"></i>商务舒适型
@@ -576,6 +749,7 @@
 
                     <!-- 商务酒店列表 -->
                     <div id="content-standard" class="hotel-content active">
+                        <!-- AI推荐酒店 -->
                         <div class="bg-white border-2 border-green-500 rounded-lg overflow-hidden mb-4 shadow-md relative">
                             <!-- AI推荐标签 -->
                             <div class="absolute top-3 right-3 bg-green-500 text-white px-3 py-1 rounded-lg shadow-md flex items-center z-10">
@@ -587,31 +761,31 @@
                             
                             <div class="flex">
                                 <div class="w-1/3">
-                                    <img src="https://picsum.photos/id/164/300/200" alt="酒店" class="h-full w-full object-cover">
+                                    <img src="https://picsum.photos/id/164/300/200" alt="北京国贸大酒店" class="h-full w-full object-cover">
                                 </div>
                                 <div class="w-2/3 p-4">
                                     <div class="flex justify-between items-start">
                                         <div>
-                                            <h4 class="text-xl font-medium">深圳湾艾维克酒店</h4>
+                                            <h4 class="text-xl font-medium">北京国贸大酒店</h4>
                                             <div class="flex items-center mt-1">
                                                 <div class="flex text-yellow-400">
                                                     <i class="fas fa-star"></i>
                                                     <i class="fas fa-star"></i>
                                                     <i class="fas fa-star"></i>
                                                     <i class="fas fa-star"></i>
-                                                    <i class="far fa-star"></i>
+                                                    <i class="fas fa-star"></i>
                                                 </div>
-                                                <span class="text-sm text-gray-500 ml-2">4.0分</span>
+                                                <span class="text-sm text-gray-500 ml-2">4.6分</span>
                                             </div>
                                         </div>
-                                        <div class="text-2xl font-bold text-red-500">¥450</div>
+                                        <div class="text-2xl font-bold text-red-500">¥680</div>
                                     </div>
                                     
                                     <div class="mt-3">
                                         <div class="flex items-center text-sm text-gray-600 mb-2">
                                             <i class="fas fa-map-marker-alt text-red-500 mr-2"></i>
-                                            <span>南山区科苑南路2666号</span>
-                                            <span class="ml-2 px-2 py-0.5 bg-blue-50 text-blue-700 rounded text-xs">距深圳大学 1.2 公里</span>
+                                            <span>朝阳区建国门外大街1号</span>
+                                            <span class="ml-2 px-2 py-0.5 bg-blue-50 text-blue-700 rounded text-xs">距国家会议中心 16.5 公里</span>
                                         </div>
                                         <div class="flex flex-wrap mt-3">
                                             <span class="bg-blue-50 text-blue-700 text-xs px-2 py-1 rounded mr-2 mb-2">免费WiFi</span>
@@ -624,22 +798,105 @@
                                     <div class="mt-3 bg-green-50 rounded-lg p-2 border border-green-100">
                                         <div class="text-sm text-green-700">
                                             <i class="fas fa-check-circle mr-1"></i>
-                                            AI分析：符合公司住宿标准，临近目的地，配套设施完善，获评分高
+                                            AI分析：符合公司住宿标准，临近国家会议中心，配套设施完善，评分最高
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="bg-white border border-gray-200 rounded-lg overflow-hidden mb-4">
+                        <!-- 德全奢品酒店 -->
+                        <div class="bg-white border border-gray-200 rounded-lg overflow-hidden mb-4 hover:shadow-md transition-shadow">
                             <div class="flex">
                                 <div class="w-1/3">
-                                    <img src="https://picsum.photos/id/167/300/200" alt="酒店" class="h-full w-full object-cover">
+                                    <img src="https://picsum.photos/id/258/300/200" alt="德全奢品酒店" class="h-full w-full object-cover">
                                 </div>
                                 <div class="w-2/3 p-4">
                                     <div class="flex justify-between items-start">
                                         <div>
-                                            <h4 class="text-xl font-medium">深圳益田威斯汀酒店</h4>
+                                            <h4 class="text-xl font-medium">德全奢品酒店</h4>
+                                            <div class="flex items-center mt-1">
+                                                <div class="flex text-yellow-400">
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="far fa-star"></i>
+                                                </div>
+                                                <span class="text-sm text-gray-500 ml-2">4.2分</span>
+                                            </div>
+                                        </div>
+                                        <div class="text-2xl font-bold text-red-500">¥750</div>
+                                    </div>
+                                    
+                                    <div class="mt-3">
+                                        <div class="flex items-center text-sm text-gray-600 mb-2">
+                                            <i class="fas fa-map-marker-alt text-red-500 mr-2"></i>
+                                            <span>朝阳区东四环中路195号</span>
+                                            <span class="ml-2 px-2 py-0.5 bg-blue-50 text-blue-700 rounded text-xs">距国家会议中心 6.8 公里</span>
+                                        </div>
+                                        <div class="flex flex-wrap mt-3">
+                                            <span class="bg-blue-50 text-blue-700 text-xs px-2 py-1 rounded mr-2 mb-2">免费WiFi</span>
+                                            <span class="bg-blue-50 text-blue-700 text-xs px-2 py-1 rounded mr-2 mb-2">奢华套房</span>
+                                            <span class="bg-blue-50 text-blue-700 text-xs px-2 py-1 rounded mr-2 mb-2">SPA中心</span>
+                                            <span class="bg-blue-50 text-blue-700 text-xs px-2 py-1 rounded mr-2 mb-2">高级餐厅</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 观塘假日酒店 -->
+                        <div class="bg-white border border-gray-200 rounded-lg overflow-hidden mb-4 hover:shadow-md transition-shadow">
+                            <div class="flex">
+                                <div class="w-1/3">
+                                    <img src="https://picsum.photos/id/342/300/200" alt="观塘假日酒店" class="h-full w-full object-cover">
+                                </div>
+                                <div class="w-2/3 p-4">
+                                    <div class="flex justify-between items-start">
+                                        <div>
+                                            <h4 class="text-xl font-medium">观塘假日酒店</h4>
+                                            <div class="flex items-center mt-1">
+                                                <div class="flex text-yellow-400">
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="far fa-star"></i>
+                                                </div>
+                                                <span class="text-sm text-gray-500 ml-2">4.1分</span>
+                                            </div>
+                                        </div>
+                                        <div class="text-2xl font-bold text-red-500">¥520</div>
+                                    </div>
+                                    
+                                    <div class="mt-3">
+                                        <div class="flex items-center text-sm text-gray-600 mb-2">
+                                            <i class="fas fa-map-marker-alt text-red-500 mr-2"></i>
+                                            <span>朝阳区酒仙桥路10号</span>
+                                            <span class="ml-2 px-2 py-0.5 bg-blue-50 text-blue-700 rounded text-xs">距国家会议中心 5.2 公里</span>
+                                        </div>
+                                        <div class="flex flex-wrap mt-3">
+                                            <span class="bg-blue-50 text-blue-700 text-xs px-2 py-1 rounded mr-2 mb-2">免费WiFi</span>
+                                            <span class="bg-blue-50 text-blue-700 text-xs px-2 py-1 rounded mr-2 mb-2">免费早餐</span>
+                                            <span class="bg-blue-50 text-blue-700 text-xs px-2 py-1 rounded mr-2 mb-2">健身房</span>
+                                            <span class="bg-blue-50 text-blue-700 text-xs px-2 py-1 rounded mr-2 mb-2">会议室</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 北辰五洲皇冠国际酒店 -->
+                        <div class="bg-white border border-gray-200 rounded-lg overflow-hidden mb-4 hover:shadow-md transition-shadow">
+                            <div class="flex">
+                                <div class="w-1/3">
+                                    <img src="https://picsum.photos/id/96/300/200" alt="北辰五洲皇冠国际酒店" class="h-full w-full object-cover">
+                                </div>
+                                <div class="w-2/3 p-4">
+                                    <div class="flex justify-between items-start">
+                                        <div>
+                                            <h4 class="text-xl font-medium">北辰五洲皇冠国际酒店</h4>
                                             <div class="flex items-center mt-1">
                                                 <div class="flex text-yellow-400">
                                                     <i class="fas fa-star"></i>
@@ -651,14 +908,62 @@
                                                 <span class="text-sm text-gray-500 ml-2">4.8分</span>
                                             </div>
                                         </div>
-                                        <div class="text-2xl font-bold text-red-500">¥680</div>
+                                        <div class="text-2xl font-bold text-red-500">¥980</div>
                                     </div>
                                     
                                     <div class="mt-3">
                                         <div class="flex items-center text-sm text-gray-600 mb-2">
                                             <i class="fas fa-map-marker-alt text-red-500 mr-2"></i>
-                                            <span>南山区深南大道9028号</span>
-                                            <span class="ml-2 px-2 py-0.5 bg-blue-50 text-blue-700 rounded text-xs">距深圳大学 3.5 公里</span>
+                                            <span>朝阳区北辰东路8号</span>
+                                            <span class="ml-2 px-2 py-0.5 bg-blue-50 text-blue-700 rounded text-xs">距国家会议中心 2.1 公里</span>
+                                        </div>
+                                        <div class="flex flex-wrap mt-3">
+                                            <span class="bg-blue-50 text-blue-700 text-xs px-2 py-1 rounded mr-2 mb-2">免费WiFi</span>
+                                            <span class="bg-blue-50 text-blue-700 text-xs px-2 py-1 rounded mr-2 mb-2">行政酒廊</span>
+                                            <span class="bg-blue-50 text-blue-700 text-xs px-2 py-1 rounded mr-2 mb-2">室内游泳池</span>
+                                            <span class="bg-blue-50 text-blue-700 text-xs px-2 py-1 rounded mr-2 mb-2">豪华水疗</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mt-3 bg-yellow-50 rounded-lg p-2 border border-yellow-200">
+                                        <div class="text-sm text-yellow-700">
+                                            <i class="fas fa-exclamation-triangle mr-1"></i>
+                                            预算提醒：价格超出标准预算范围
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 北京康莱德酒店 -->
+                        <div class="bg-white border border-gray-200 rounded-lg overflow-hidden mb-4 hover:shadow-md transition-shadow">
+                            <div class="flex">
+                                <div class="w-1/3">
+                                    <img src="https://picsum.photos/id/167/300/200" alt="北京康莱德酒店" class="h-full w-full object-cover">
+                                </div>
+                                <div class="w-2/3 p-4">
+                                    <div class="flex justify-between items-start">
+                                        <div>
+                                            <h4 class="text-xl font-medium">北京康莱德酒店</h4>
+                                            <div class="flex items-center mt-1">
+                                                <div class="flex text-yellow-400">
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="far fa-star"></i>
+                                                </div>
+                                                <span class="text-sm text-gray-500 ml-2">4.3分</span>
+                                            </div>
+                                        </div>
+                                        <div class="text-2xl font-bold text-red-500">¥850</div>
+                                    </div>
+                                    
+                                    <div class="mt-3">
+                                        <div class="flex items-center text-sm text-gray-600 mb-2">
+                                            <i class="fas fa-map-marker-alt text-red-500 mr-2"></i>
+                                            <span>朝阳区东三环中路29号</span>
+                                            <span class="ml-2 px-2 py-0.5 bg-blue-50 text-blue-700 rounded text-xs">距国家会议中心 12.3 公里</span>
                                         </div>
                                         <div class="flex flex-wrap mt-3">
                                             <span class="bg-blue-50 text-blue-700 text-xs px-2 py-1 rounded mr-2 mb-2">免费WiFi</span>
@@ -672,17 +977,18 @@
                         </div>
                     </div>
 
-                    <div class="flex justify-end mt-6">
-                        <button id="back-to-transport" class="border border-gray-300 bg-white hover:bg-gray-50 text-gray-700 font-medium py-2.5 px-6 rounded-lg flex items-center mr-3">
-                            <i class="fas fa-arrow-left mr-2"></i>
-                            上一步：交通推荐
-                        </button>
-                        <a href="confirm_order.html" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-8 rounded-lg flex items-center">
-                            下一步：确认订单
-                            <i class="fas fa-arrow-right ml-2"></i>
-                        </a>
-                    </div>
-                </div>
+                        <div class="flex justify-end mt-6">
+                            <button id="back-to-transport" class="border border-gray-300 bg-white hover:bg-gray-50 text-gray-700 font-medium py-2.5 px-6 rounded-lg flex items-center mr-3">
+                                <i class="fas fa-arrow-left mr-2"></i>
+                                上一步：交通推荐
+                            </button>
+                            <a href="confirm_order.html" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-8 rounded-lg flex items-center">
+                                下一步：确认订单
+                                <i class="fas fa-arrow-right ml-2"></i>
+                            </a>
+                        </div>
+                    </div> <!-- 结束 hotelRealContent -->
+                </div> <!-- 结束 tab-content-3 -->
             </div>
         </div>
     </main>
@@ -724,6 +1030,130 @@
                 
                 const activeContent = document.getElementById('tab-content-' + tabId);
                 activeContent.classList.add('active');
+                
+                // 根据不同标签页更新AI状态和分析日志
+                updateTabAnalysis(tabId);
+            }
+            
+            // 显示酒店推荐真实内容函数
+            function showHotelContent() {
+                const loadingState = document.getElementById('hotelLoadingState');
+                const realContent = document.getElementById('hotelRealContent');
+                
+                if (loadingState && realContent) {
+                    // 隐藏加载状态
+                    loadingState.style.display = 'none';
+                    
+                    // 显示真实内容
+                    realContent.classList.remove('hidden');
+                    realContent.style.display = 'block';
+                    setTimeout(() => {
+                        realContent.classList.remove('opacity-0');
+                        realContent.classList.add('opacity-100');
+                    }, 50);
+                }
+            }
+
+            // 隐藏酒店推荐真实内容函数
+            function hideHotelContent() {
+                const loadingState = document.getElementById('hotelLoadingState');
+                const realContent = document.getElementById('hotelRealContent');
+                
+                if (loadingState && realContent) {
+                    // 显示加载状态
+                    loadingState.style.display = 'block';
+                    
+                    // 隐藏真实内容
+                    realContent.classList.add('opacity-0');
+                    realContent.classList.remove('opacity-100');
+                    setTimeout(() => {
+                        realContent.classList.add('hidden');
+                    }, 300);
+                }
+            }
+            
+            // 根据标签页更新分析内容
+            function updateTabAnalysis(tabId) {
+                clearAnalysisLog();
+                
+                switch(tabId) {
+                    case '1': // 申请单
+                        // 如果从其他标签切换过来，需要隐藏其他内容
+                        hideTransportContent();
+                        hideHotelContent();
+                        
+                        // 初始状态：分析中
+                        updateProgress(20, '申请单Agent分析中');
+                        
+                        // 逐步添加分析日志
+                        addAnalysisLog('✓ 申请单Agent正在拆解出发地信息...', 1000);
+                        addAnalysisLog('✓ 申请单Agent正在拆解目的地信息...', 2000);
+                        addAnalysisLog('✓ 申请单Agent正在拆解开始时间...', 3000);
+                        addAnalysisLog('✓ 申请单Agent正在拆解结束时间...', 4000);
+                        addAnalysisLog('✓ 申请单Agent已完成信息拆解，生成标准申请单', 5000);
+                        
+                        // 显示真实内容（在最后一行日志显示时）
+                        setTimeout(() => {
+                            showApplicationContent();
+                        }, 5000);
+                        
+                        // 最终状态：分析完成
+                        setTimeout(() => {
+                            updateProgress(100, '申请单Agent分析完成');
+                        }, 5500);
+                        break;
+                    case '2': // 交通推荐
+                        // 如果从其他标签切换过来，需要隐藏其他内容
+                        hideApplicationContent();
+                        hideHotelContent();
+                        
+                        // 初始状态：分析中
+                        updateProgress(20, '交通Agent分析中');
+                        
+                        // 逐步添加分析日志
+                        addAnalysisLog('✓ 交通Agent正在分析出行距离（上海-北京）...', 1000);
+                        addAnalysisLog('✓ 交通Agent正在查询上海天气状况...', 2000);
+                        addAnalysisLog('✓ 交通Agent正在查询北京天气状况...', 3000);
+                        addAnalysisLog('✓ 交通Agent正在分析个人报销额度...', 4000);
+                        addAnalysisLog('✓ 交通Agent已汇总分析结果，生成推荐列表', 5000);
+                        
+                        // 显示真实内容（在最后一行日志显示时）
+                        setTimeout(() => {
+                            showTransportContent();
+                        }, 5000);
+                        
+                        // 最终状态：分析完成
+                        setTimeout(() => {
+                            updateProgress(100, '交通Agent分析完成');
+                        }, 5500);
+                        break;
+                    case '3': // 酒店推荐
+                        // 如果从其他标签切换过来，需要隐藏其他内容
+                        hideApplicationContent();
+                        hideTransportContent();
+                        
+                        // 初始状态：分析中
+                        updateProgress(20, '酒店Agent分析中');
+                        
+                        // 逐步添加分析日志
+                        addAnalysisLog('✓ 酒店Agent正在分析目的地位置（国家会议中心）...', 1000);
+                        addAnalysisLog('✓ 酒店Agent正在查询周边酒店资源...', 2000);
+                        addAnalysisLog('✓ 酒店Agent正在分析个人报销预算范围...', 3000);
+                        addAnalysisLog('✓ 酒店Agent正在筛选价格标准范围...', 4000);
+                        addAnalysisLog('✓ 酒店Agent正在评估距离便利性...', 5000);
+                        addAnalysisLog('✓ 酒店Agent已汇总分析结果，生成推荐列表', 6000);
+                        
+                        // 显示真实内容（在最后一行日志显示时）
+                        setTimeout(() => {
+                            showHotelContent();
+                        }, 6000);
+                        
+                        // 最终状态：分析完成
+                        setTimeout(() => {
+                            updateProgress(100, '酒店Agent分析完成');
+                        }, 6500);
+                        break;
+                }
             }
             
             // 为每个标签按钮添加点击事件
@@ -820,8 +1250,204 @@
                 }
             }
 
-            // 初始化显示
-            updateProgress(100, 'AI分析完成，请手动查看和确认各项推荐方案');
+            // 添加分析日志函数
+            function addAnalysisLog(message, delay = 0) {
+                setTimeout(() => {
+                    const logContainer = document.getElementById('aiAnalysisLog');
+                    const logItem = document.createElement('div');
+                    logItem.className = 'text-sm text-blue-600 opacity-0 transition-opacity duration-300';
+                    logItem.innerHTML = `${message}`;
+                    
+                    logContainer.appendChild(logItem);
+                    
+                    // 触发渐入动画
+                    setTimeout(() => {
+                        logItem.classList.remove('opacity-0');
+                        logItem.classList.add('opacity-100');
+                    }, 50);
+                    
+                    // 自动调整高度和滚动
+                    adjustStatusBarHeight();
+                    
+                    // 滚动到底部
+                    const statusContent = document.getElementById('aiStatusContent');
+                    statusContent.scrollTop = statusContent.scrollHeight;
+                }, delay);
+            }
+
+            // 调整状态条高度函数
+            function adjustStatusBarHeight() {
+                const statusBar = document.getElementById('aiStatusBar');
+                const content = document.getElementById('aiStatusContent');
+                const logContainer = document.getElementById('aiAnalysisLog');
+                
+                // 计算分析日志的内容高度
+                const logHeight = logContainer.scrollHeight;
+                const baseHeight = 80; // 最小高度
+                const maxHeight = 160; // 最大高度
+                
+                // 根据日志内容动态调整整个状态条高度
+                // 主状态文本 + 分析日志区域 + 进度条 + 内边距
+                let newHeight = Math.min(Math.max(baseHeight, 30 + logHeight + 20 + 20), maxHeight);
+                statusBar.style.height = newHeight + 'px';
+                
+                // 如果分析日志内容超过最大高度，显示滚动条
+                if (logHeight > 80) {
+                    content.style.overflowY = 'auto';
+                } else {
+                    content.style.overflowY = 'hidden';
+                }
+            }
+
+            // 模拟AI分析过程（可选功能）
+            function simulateAIAnalysis() {
+                const messages = [
+                    '正在分析出行需求...',
+                    '查询最优航班信息...',
+                    '对比多个交通方案...',
+                    '筛选符合标准的酒店...',
+                    '生成个性化推荐方案...',
+                    '分析完成，方案已生成'
+                ];
+                
+                messages.forEach((message, index) => {
+                    addAnalysisLog(message, index * 800);
+                });
+            }
+
+            // 清空分析日志函数
+            function clearAnalysisLog() {
+                const logContainer = document.getElementById('aiAnalysisLog');
+                logContainer.innerHTML = '';
+                adjustStatusBarHeight();
+            }
+
+            // 显示申请单真实内容函数
+            function showApplicationContent() {
+                const loadingState = document.getElementById('applicationLoadingState');
+                const realContent = document.getElementById('applicationRealContent');
+                
+                // 隐藏加载状态
+                loadingState.style.display = 'none';
+                
+                // 显示真实内容
+                realContent.classList.remove('hidden');
+                setTimeout(() => {
+                    realContent.classList.remove('opacity-0');
+                    realContent.classList.add('opacity-100');
+                }, 50);
+            }
+
+            // 隐藏申请单真实内容函数（用于其他标签页）
+            function hideApplicationContent() {
+                const loadingState = document.getElementById('applicationLoadingState');
+                const realContent = document.getElementById('applicationRealContent');
+                
+                // 显示加载状态
+                loadingState.style.display = 'block';
+                
+                // 隐藏真实内容
+                realContent.classList.add('opacity-0');
+                realContent.classList.remove('opacity-100');
+                setTimeout(() => {
+                    realContent.classList.add('hidden');
+                }, 300);
+            }
+
+            // 显示交通推荐真实内容函数
+            function showTransportContent() {
+                const loadingState = document.getElementById('transportLoadingState');
+                const realContent = document.getElementById('transportRealContent');
+                
+                // 隐藏加载状态
+                loadingState.style.display = 'none';
+                
+                // 显示真实内容
+                realContent.classList.remove('hidden');
+                setTimeout(() => {
+                    realContent.classList.remove('opacity-0');
+                    realContent.classList.add('opacity-100');
+                }, 50);
+            }
+
+            // 隐藏交通推荐真实内容函数
+            function hideTransportContent() {
+                const loadingState = document.getElementById('transportLoadingState');
+                const realContent = document.getElementById('transportRealContent');
+                
+                // 显示加载状态
+                loadingState.style.display = 'block';
+                
+                // 隐藏真实内容
+                realContent.classList.add('opacity-0');
+                realContent.classList.remove('opacity-100');
+                setTimeout(() => {
+                    realContent.classList.add('hidden');
+                }, 300);
+            }
+
+            // 打开百度地图功能
+            window.openBaiduMap = function() {
+                // 百度地图网页版URL，包含国家会议中心标记
+                const baiduMapURL = 'https://map.baidu.com/?newmap=1&ie=utf-8&s=s%26wd%3D国家会议中心%26c%3D131%26src%3D0%26pn%3D0%26sug%3D0%26l%3D12%26b%3D(116.34,39.95;116.44,40.05)%26from%3Dwebmap%26biz_forward%3D%7B%22scaler%22:1,%22styles%22:%22pl%22%7D';
+                
+                // 检测设备类型
+                const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+                
+                if (isMobile) {
+                    // 移动端尝试打开百度地图APP
+                    const baiduAppURL = 'baidumap://map/place/search?query=国家会议中心&location=40.002893,116.389445&radius=2000&src=webapp.baidu.openAPIdemo';
+                    
+                    // 尝试打开APP，如果失败则打开网页版
+                    const iframe = document.createElement('iframe');
+                    iframe.src = baiduAppURL;
+                    iframe.style.display = 'none';
+                    document.body.appendChild(iframe);
+                    
+                    setTimeout(() => {
+                        document.body.removeChild(iframe);
+                        window.open(baiduMapURL, '_blank');
+                    }, 2000);
+                } else {
+                    // 桌面端直接打开百度地图网页版
+                    window.open(baiduMapURL, '_blank');
+                }
+            };
+            
+            // 百度地图错误处理
+            window.handleBaiduMapError = function() {
+                console.log('百度地图加载失败，显示备用方案');
+                const mapImage = document.querySelector('#baiduMapContainer img');
+                const fallback = document.getElementById('mapFallback');
+                
+                if (mapImage && fallback) {
+                    mapImage.style.display = 'none';
+                    fallback.classList.remove('hidden');
+                    
+                    // 添加重试功能
+                    setTimeout(() => {
+                        const retryBtn = document.createElement('button');
+                        retryBtn.innerHTML = '<i class="fas fa-redo mr-1"></i>重新加载地图';
+                        retryBtn.className = 'mt-3 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700 transition-colors';
+                        retryBtn.onclick = () => location.reload();
+                        fallback.querySelector('.text-center').appendChild(retryBtn);
+                    }, 1000);
+                }
+            };
+            
+            // 百度地图加载成功处理
+            window.handleBaiduMapSuccess = function() {
+                console.log('百度地图加载成功');
+                const fallback = document.getElementById('mapFallback');
+                if (fallback) {
+                    fallback.classList.add('hidden');
+                }
+            };
+
+            // 初始化显示 - 显示申请单页面的分析结果
+            setTimeout(() => {
+                updateTabAnalysis('1');
+            }, 500);
         });
     </script>
 </body>
