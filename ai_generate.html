@@ -204,23 +204,6 @@
                     AI生成
                 </h1>
                 
-                <!-- AI状态提示条 -->
-                <div id="aiStatusBar" class="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-6 flex items-center justify-between relative overflow-hidden">
-                    <div class="flex items-center flex-grow">
-                        <svg width="24" height="24" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" class="mr-3 animate-pulse">
-                            <path fill-rule="evenodd" clip-rule="evenodd" d="M3.18335 6.00092C3.18335 3.93905 4.85482 2.26758 6.91668 2.26758C8.97855 2.26758 10.65 3.93905 10.65 6.00091V7.49935C11.2729 6.90161 12.1186 6.53425 13.05 6.53425C14.3242 6.53425 15.4379 7.22169 16.0403 8.24593C16.6573 7.6798 17.48 7.33425 18.3834 7.33425C19.6576 7.33425 20.7712 8.02169 21.3736 9.04593C21.9906 8.4798 22.8133 8.13424 23.7167 8.13424C25.6313 8.13424 27.1834 9.68632 27.1834 11.6009V20.4009C27.1834 24.2301 24.0792 27.3342 20.25 27.3342L10.65 27.3342H10.1167V27.3331C9.94161 27.3317 9.81393 27.3286 9.69806 27.3216C6.1985 27.1099 3.40768 24.3191 3.196 20.8195C3.18335 20.6104 3.18335 20.3628 3.18335 19.8676V6.00092Z" fill="#3b82f6"/>
-                        </svg>
-                        <div class="flex-grow">
-                            <p class="font-medium text-blue-800" id="aiStatusText">AI正在分析您的行程并生成最优建议...</p>
-                            <div class="w-full h-1.5 bg-blue-100 rounded-full mt-1 overflow-hidden">
-                                <div id="aiProgressBar" class="h-full bg-blue-500 rounded-full" style="width: 0%"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- 倒计时显示区（已禁用） -->
-                    <div id="countdownDisplay" class="text-blue-700 font-bold text-2xl ml-4 hidden bg-blue-100 w-10 h-10 rounded-full flex items-center justify-center" style="display: none;"></div>
-                </div>
-                
                 <!-- 子步骤导航条 -->
                 <div class="border-b border-gray-200 mb-6">
                     <nav class="flex -mb-px">
@@ -237,6 +220,23 @@
                             酒店推荐
                         </button>
                     </nav>
+                </div>
+                
+                <!-- AI状态提示条 -->
+                <div id="aiStatusBar" class="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-6 flex items-center justify-between relative overflow-hidden">
+                    <div class="flex items-center flex-grow">
+                        <svg width="24" height="24" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" class="mr-3 animate-pulse">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M3.18335 6.00092C3.18335 3.93905 4.85482 2.26758 6.91668 2.26758C8.97855 2.26758 10.65 3.93905 10.65 6.00091V7.49935C11.2729 6.90161 12.1186 6.53425 13.05 6.53425C14.3242 6.53425 15.4379 7.22169 16.0403 8.24593C16.6573 7.6798 17.48 7.33425 18.3834 7.33425C19.6576 7.33425 20.7712 8.02169 21.3736 9.04593C21.9906 8.4798 22.8133 8.13424 23.7167 8.13424C25.6313 8.13424 27.1834 9.68632 27.1834 11.6009V20.4009C27.1834 24.2301 24.0792 27.3342 20.25 27.3342L10.65 27.3342H10.1167V27.3331C9.94161 27.3317 9.81393 27.3286 9.69806 27.3216C6.1985 27.1099 3.40768 24.3191 3.196 20.8195C3.18335 20.6104 3.18335 20.3628 3.18335 19.8676V6.00092Z" fill="#3b82f6"/>
+                        </svg>
+                        <div class="flex-grow">
+                            <p class="font-medium text-blue-800" id="aiStatusText">AI分析完成，请手动查看和确认各项推荐方案</p>
+                            <div class="w-full h-1.5 bg-blue-100 rounded-full mt-1 overflow-hidden">
+                                <div id="aiProgressBar" class="h-full bg-blue-500 rounded-full" style="width: 100%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 倒计时显示区（已禁用） -->
+                    <div id="countdownDisplay" class="text-blue-700 font-bold text-2xl ml-4 hidden bg-blue-100 w-10 h-10 rounded-full flex items-center justify-center" style="display: none;"></div>
                 </div>
                 
                 <!-- 申请单内容 -->
