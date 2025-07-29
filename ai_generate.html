@@ -667,11 +667,13 @@
                                 <div id="baiduMapContainer" class="w-full h-full relative">
                                     <!-- 主地图图片 -->
                                     <img 
-                                        src="https://api.map.baidu.com/staticimage/v2?ak=2bTSEtGSuLJXkmt7rLX4PqWG&center=116.389445,40.002893&width=1200&height=256&zoom=13&dpiType=ph&markers=116.389445,40.002893|116.459308,39.918058|116.382993,39.990478|116.461347,39.920514|116.389945,40.005893|116.387945,40.001893&markerStyles=l,A,0xff0000,0xffff00,国家会议中心|m,B,0x00ff00,0xffffff,国贸|m,C,0x0066ff,0xffffff,北辰|m,D,0x0066ff,0xffffff,康莱德|m,E,0x0066ff,0xffffff,德全|m,F,0x0066ff,0xffffff,会议酒店"
+                                        id="baiduMapImage"
+                                        src="https://api.map.baidu.com/staticimage/v2?ak=2bTSEtGSuLJXkmt7rLX4PqWG&center=116.389445,40.002893&width=1200&height=256&zoom=12&dpiType=ph&scale=2&copyright=1&coordtype=wgs84ll&qq-pf-to=pcqq.c2c"
                                         alt="国家会议中心附近酒店分布地图" 
-                                        class="w-full h-full object-cover"
+                                        class="w-full h-full object-cover rounded-lg"
                                         onload="handleBaiduMapSuccess()"
-                                        onerror="handleBaiduMapError()">
+                                        onerror="handleBaiduMapError()"
+                                        crossorigin="anonymous">
                                     
                                     <!-- 备用地图方案（如果百度地图加载失败） -->
                                     <div id="mapFallback" class="absolute inset-0 bg-gradient-to-br from-blue-100 to-green-100 hidden">
@@ -702,10 +704,14 @@
                                 </div>
                                 
                                 <!-- 智能地图操作面板 -->
-                                <div class="absolute top-3 right-3 bg-white bg-opacity-90 rounded-lg shadow-md p-2">
-                                    <button onclick="openBaiduMap()" class="text-xs text-blue-600 hover:text-blue-800 flex items-center">
+                                <div class="absolute top-3 right-3 bg-white bg-opacity-90 rounded-lg shadow-md p-2 space-y-1">
+                                    <button onclick="openBaiduMap()" class="text-xs text-blue-600 hover:text-blue-800 flex items-center w-full">
                                         <i class="fas fa-external-link-alt mr-1"></i>
                                         在百度地图中查看
+                                    </button>
+                                    <button onclick="handleBaiduMapError()" class="text-xs text-gray-600 hover:text-gray-800 flex items-center w-full" title="测试备用地图">
+                                        <i class="fas fa-map mr-1"></i>
+                                        备用地图
                                     </button>
                                 </div>
                                 
@@ -1414,23 +1420,78 @@
                 }
             };
             
-            // 百度地图错误处理
+            // 百度地图错误处理 - 使用本地SVG地图
             window.handleBaiduMapError = function() {
-                console.log('百度地图加载失败，显示备用方案');
-                const mapImage = document.querySelector('#baiduMapContainer img');
+                console.log('百度地图加载失败，显示本地SVG地图');
+                const mapImage = document.querySelector('#baiduMapImage');
                 const fallback = document.getElementById('mapFallback');
                 
                 if (mapImage && fallback) {
                     mapImage.style.display = 'none';
                     fallback.classList.remove('hidden');
                     
+                    // 创建自定义SVG地图
+                    const svgMap = `
+                        <svg width="100%" height="100%" viewBox="0 0 1200 256" xmlns="http://www.w3.org/2000/svg">
+                            <!-- 背景地图 -->
+                            <rect width="100%" height="100%" fill="#f0f8ff"/>
+                            <defs>
+                                <pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse">
+                                    <path d="M 50 0 L 0 0 0 50" fill="none" stroke="#e0e7ff" stroke-width="1"/>
+                                </pattern>
+                            </defs>
+                            <rect width="100%" height="100%" fill="url(#grid)"/>
+                            
+                            <!-- 道路 -->
+                            <path d="M0 120 Q300 100 600 120 Q900 140 1200 120" stroke="#d1d5db" stroke-width="8" fill="none"/>
+                            <path d="M200 0 Q250 128 300 256" stroke="#d1d5db" stroke-width="6" fill="none"/>
+                            <path d="M800 0 Q850 128 900 256" stroke="#d1d5db" stroke-width="6" fill="none"/>
+                            
+                            <!-- 国家会议中心 (红色标记) -->
+                            <circle cx="600" cy="120" r="15" fill="#ef4444" stroke="#ffffff" stroke-width="3"/>
+                            <text x="600" y="105" text-anchor="middle" font-size="12" font-weight="bold" fill="#374151">🅰</text>
+                            <text x="600" y="145" text-anchor="middle" font-size="10" fill="#374151">国家会议中心</text>
+                            
+                            <!-- 北京国贸大酒店 (绿色 - AI推荐) -->
+                            <circle cx="900" cy="160" r="12" fill="#10b981" stroke="#ffffff" stroke-width="2"/>
+                            <text x="900" y="165" text-anchor="middle" font-size="10" font-weight="bold" fill="#ffffff">🅱</text>
+                            <text x="900" y="180" text-anchor="middle" font-size="9" fill="#374151">国贸大酒店</text>
+                            
+                            <!-- 北辰五洲皇冠 (蓝色) -->
+                            <circle cx="450" cy="80" r="10" fill="#3b82f6" stroke="#ffffff" stroke-width="2"/>
+                            <text x="450" y="85" text-anchor="middle" font-size="9" font-weight="bold" fill="#ffffff">Ⓒ</text>
+                            <text x="450" y="100" text-anchor="middle" font-size="8" fill="#374151">北辰五洲</text>
+                            
+                            <!-- 康莱德酒店 (蓝色) -->
+                            <circle cx="850" cy="200" r="10" fill="#3b82f6" stroke="#ffffff" stroke-width="2"/>
+                            <text x="850" y="205" text-anchor="middle" font-size="9" font-weight="bold" fill="#ffffff">Ⓓ</text>
+                            <text x="850" y="220" text-anchor="middle" font-size="8" fill="#374151">康莱德</text>
+                            
+                            <!-- 德全奢品酒店 (蓝色) -->
+                            <circle cx="550" cy="90" r="10" fill="#3b82f6" stroke="#ffffff" stroke-width="2"/>
+                            <text x="550" y="95" text-anchor="middle" font-size="9" font-weight="bold" fill="#ffffff">Ⓔ</text>
+                            <text x="550" y="110" text-anchor="middle" font-size="8" fill="#374151">德全奢品</text>
+                            
+                            <!-- 会议中心酒店 (蓝色) -->
+                            <circle cx="580" cy="150" r="10" fill="#3b82f6" stroke="#ffffff" stroke-width="2"/>
+                            <text x="580" y="155" text-anchor="middle" font-size="9" font-weight="bold" fill="#ffffff">Ⓕ</text>
+                            <text x="580" y="170" text-anchor="middle" font-size="8" fill="#374151">会议酒店</text>
+                            
+                            <!-- 距离线条 -->
+                            <path d="M600 120 L900 160" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5,5" opacity="0.6"/>
+                            <text x="750" y="135" text-anchor="middle" font-size="9" fill="#64748b">16.5km</text>
+                        </svg>
+                    `;
+                    
+                    fallback.innerHTML = svgMap;
+                    
                     // 添加重试功能
                     setTimeout(() => {
                         const retryBtn = document.createElement('button');
                         retryBtn.innerHTML = '<i class="fas fa-redo mr-1"></i>重新加载地图';
-                        retryBtn.className = 'mt-3 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700 transition-colors';
+                        retryBtn.className = 'absolute bottom-4 right-4 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700 transition-colors shadow-lg';
                         retryBtn.onclick = () => location.reload();
-                        fallback.querySelector('.text-center').appendChild(retryBtn);
+                        fallback.appendChild(retryBtn);
                     }, 1000);
                 }
             };
@@ -1439,11 +1500,35 @@
             window.handleBaiduMapSuccess = function() {
                 console.log('百度地图加载成功');
                 const fallback = document.getElementById('mapFallback');
+                const mapImage = document.querySelector('#baiduMapImage');
                 if (fallback) {
                     fallback.classList.add('hidden');
                 }
+                if (mapImage) {
+                    mapImage.classList.add('opacity-100');
+                    mapImage.classList.remove('opacity-50');
+                }
+            };
+            
+            // 初始化地图加载状态
+            window.initMapLoading = function() {
+                const mapImage = document.querySelector('#baiduMapImage');
+                if (mapImage) {
+                    mapImage.classList.add('opacity-50', 'transition-opacity', 'duration-300');
+                    
+                    // 5秒超时处理
+                    setTimeout(() => {
+                        if (mapImage.complete && mapImage.naturalHeight === 0) {
+                            console.log('百度地图加载超时，显示备用方案');
+                            handleBaiduMapError();
+                        }
+                    }, 5000);
+                }
             };
 
+            // 初始化地图加载状态
+            initMapLoading();
+            
             // 初始化显示 - 显示申请单页面的分析结果
             setTimeout(() => {
                 updateTabAnalysis('1');
