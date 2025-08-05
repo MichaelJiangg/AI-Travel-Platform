@@ -1002,6 +1002,10 @@
                                             <i class="fas fa-check-circle mr-1"></i>
                                             AI分析：符合公司住宿标准，临近北人亦创国际会展中心，配套设施完善，评分最高
                                         </div>
+                                        <div class="text-sm text-green-700 mt-1">
+                                            <i class="fas fa-car mr-1"></i>
+                                            距离酒店 1 公里，打车 5 分钟就可以到
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1979,14 +1983,7 @@
                     
                     fallback.innerHTML = svgMap;
                     
-                    // 添加重试功能
-                    setTimeout(() => {
-                        const retryBtn = document.createElement('button');
-                        retryBtn.innerHTML = '<i class="fas fa-redo mr-1"></i>重新加载地图';
-                        retryBtn.className = 'absolute bottom-4 right-4 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700 transition-colors shadow-lg';
-                        retryBtn.onclick = () => location.reload();
-                        fallback.appendChild(retryBtn);
-                    }, 1000);
+
                 }
             };
             
