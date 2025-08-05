@@ -285,25 +285,26 @@
                     </div>
 
                     <!-- 附件上传区域 -->
-                    <div class="mt-4 bg-gray-50 rounded-lg p-4 border border-gray-200">
-                        <div class="flex items-center text-sm font-medium text-gray-700 mb-2">
+                    <div class="mt-4 flex flex-col space-y-2">
+                        <div class="flex items-center text-xs text-gray-600">
                             <i class="fas fa-paperclip text-gray-500 mr-2 text-xs"></i>
-                            <span>相关文件</span>
+                            <span>相关文件：录入更多的文件，我可以帮你安排的更好哦～</span>
                         </div>
-                        <p class="text-xs text-gray-600 mb-3">录入更多的文件，我可以帮你安排的更好哦～</p>
                         
-                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-3 text-center hover:border-blue-400 transition-colors cursor-pointer" id="fileUploadArea">
-                            <div class="flex flex-col items-center">
-                                <i class="fas fa-cloud-upload-alt text-lg text-gray-400 mb-1"></i>
-                                <p class="text-xs text-gray-600 mb-0.5">点击或拖拽文件到此处上传</p>
-                                <p class="text-xs text-gray-500">支持 PDF、Word、Excel、图片等格式</p>
-                            </div>
+                        <div class="inline-flex items-center bg-white border border-gray-200 hover:border-blue-400 rounded-lg px-3 py-2 text-center cursor-pointer transition-colors" id="fileUploadArea" style="width: max-content;">
+                            <svg width="20" height="20" viewBox="0 0 92 32" fill="none" xmlns="http://www.w3.org/2000/svg" class="mr-2">
+                                <path d="M18.5859 9C18.9837 9.00004 19.3652 9.15818 19.6465 9.43945L21.5605 11.3535C21.8418 11.6348 22 12.0163 22 12.4141V21.5C22 22.3284 21.3284 23 20.5 23H11.5C10.6716 23 10 22.3284 10 21.5V10.5C10 9.67157 10.6716 9 11.5 9H18.5859ZM11.5 10C11.2239 10 11 10.2239 11 10.5V21.5C11 21.7761 11.2239 22 11.5 22H20.5C20.7761 22 21 21.7761 21 21.5V12.4141C21 12.2815 20.9472 12.1543 20.8535 12.0605L18.9395 10.1465C18.8457 10.0528 18.7185 10 18.5859 10H11.5Z" fill="#6B7280"/>
+                                <path d="M16 14L16 19" stroke="#6B7280" stroke-linecap="round"/>
+                                <path d="M14 15.999L16 13.999L18 15.999" stroke="#6B7280" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M19 12V10L21 12H19Z" fill="#6B7280" stroke="#6B7280" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span class="text-sm text-gray-700 font-medium">上传附件</span>
                             <input type="file" id="fileInput" class="hidden" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png">
                         </div>
                         
                         <!-- 已上传文件列表 -->
-                        <div id="uploadedFiles" class="mt-3 space-y-2 hidden">
-                            <div class="text-sm font-medium text-gray-700 mb-2">已上传文件：</div>
+                        <div id="uploadedFiles" class="space-y-2 hidden">
+                            <div class="text-xs font-medium text-gray-700 mb-2">已上传文件：</div>
                         </div>
                     </div>
                     
