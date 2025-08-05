@@ -292,22 +292,22 @@
                         <div class="grid grid-cols-3 gap-6 mb-6">
                             <div class="bg-gray-50 p-4 rounded-lg">
                                 <p class="text-sm text-gray-500 mb-1">开始日期</p>
-                                <p class="text-lg font-medium">2025-08-05 下午</p>
+                                <p class="text-lg font-medium">2025-08-07 下午</p>
                             </div>
                                                     <div class="bg-gray-50 p-4 rounded-lg text-center">
                             <p class="text-sm text-gray-500 mb-1">出差天数</p>
-                            <p class="text-lg font-medium">3天</p>
+                            <p class="text-lg font-medium">6天</p>
                         </div>
                             <div class="bg-gray-50 p-4 rounded-lg text-right">
                                 <p class="text-sm text-gray-500 mb-1">结束日期</p>
-                                <p class="text-lg font-medium">2025-08-08 上午</p>
+                                <p class="text-lg font-medium">2025-08-13 上午</p>
                             </div>
                         </div>
 
                         <!-- 出差原因 -->
                         <div class="bg-gray-50 p-4 rounded-lg mb-6">
                             <p class="text-sm text-gray-500 mb-1">出差原因</p>
-                            <p class="text-lg font-medium text-gray-800">去北京参加 ISC大会</p>
+                            <p class="text-lg font-medium text-gray-800">去北京参加2025世界机器人大会</p>
                         </div>
 
                         <!-- 行程明细 -->
@@ -316,46 +316,35 @@
                                                     <ul class="space-y-4">
                             <li class="journey-item py-2 border-b border-gray-100">
                                 <div class="flex justify-between">
-                                        <span class="text-gray-800">2025-08-05 下午</span>
+                                    <span class="text-gray-800">2025-08-07 下午</span>
                                     <span class="text-blue-600">0.5天</span>
                                 </div>
                                 <div class="flex items-center text-gray-600 mt-1">
-                                        <span>上海</span>
+                                    <span>上海</span>
                                     <i class="fas fa-long-arrow-alt-right mx-2 text-gray-400"></i>
-                                        <span>北京</span>
+                                    <span>北京</span>
                                 </div>
                             </li>
                             <li class="journey-item py-2 border-b border-gray-100">
                                 <div class="flex justify-between">
-                                        <span class="text-gray-800">2025-08-06</span>
-                                    <span class="text-blue-600">1天</span>
+                                    <span class="text-gray-800">2025-08-08 ～ 2025-08-12</span>
+                                    <span class="text-blue-600">5天</span>
                                 </div>
                                 <div class="flex items-center text-gray-600 mt-1">
-                                        <span>北京</span>
+                                    <span>北京</span>
                                     <i class="fas fa-location-dot mx-2 text-gray-400"></i>
-                                        <span>国家会议中心</span>
-                                </div>
-                            </li>
-                            <li class="journey-item py-2 border-b border-gray-100">
-                                <div class="flex justify-between">
-                                        <span class="text-gray-800">2025-08-07</span>
-                                    <span class="text-blue-600">1天</span>
-                                </div>
-                                <div class="flex items-center text-gray-600 mt-1">
-                                        <span>北京</span>
-                                    <i class="fas fa-location-dot mx-2 text-gray-400"></i>
-                                        <span>国家会议中心</span>
+                                    <span>北京经济技术开发区北人亦创国际会展中心</span>
                                 </div>
                             </li>
                             <li class="journey-item py-2">
                                 <div class="flex justify-between">
-                                        <span class="text-gray-800">2025-08-08 上午</span>
+                                    <span class="text-gray-800">2025-08-13 上午</span>
                                     <span class="text-blue-600">0.5天</span>
                                 </div>
                                 <div class="flex items-center text-gray-600 mt-1">
                                     <span>北京</span>
-                                        <i class="fas fa-long-arrow-alt-right mx-2 text-gray-400"></i>
-                                        <span>上海</span>
+                                    <i class="fas fa-long-arrow-alt-right mx-2 text-gray-400"></i>
+                                    <span>上海</span>
                                 </div>
                             </li>
                         </ul>
@@ -1019,6 +1008,16 @@
     <script>
         // 标签页切换逻辑
         document.addEventListener('DOMContentLoaded', function() {
+            // 读取home页面的时间信息并更新页面显示
+            const confirmedStartTime = localStorage.getItem('confirmedStartTime');
+            const confirmedReturnTime = localStorage.getItem('confirmedReturnTime');
+            
+            if (confirmedStartTime && confirmedReturnTime) {
+                // 更新开始日期和结束日期显示
+                // 这里可以根据实际需要添加时间解析和格式化逻辑
+                console.log('从home页读取的开始时间:', confirmedStartTime);
+                console.log('从home页读取的结束时间:', confirmedReturnTime);
+            }
             const tabButtons = document.querySelectorAll('.tab-button');
             const tabContents = document.querySelectorAll('.tab-content');
             
