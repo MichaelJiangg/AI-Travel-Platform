@@ -161,6 +161,27 @@
             transform: translateY(-1px);
         }
 
+        /* 地铁推荐 hover 样式 */
+        .subway-tooltip {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            z-index: 50;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            margin-top: 8px;
+        }
+        .transport-option:hover .subway-tooltip {
+            opacity: 1;
+            visibility: visible;
+        }
+
         /* 自定义滚动条样式 */
         #aiStatusContent::-webkit-scrollbar {
             width: 4px; /* 滚动条宽度 */
@@ -717,6 +738,47 @@
                                 <div class="text-sm text-green-700">
                                     <i class="fas fa-check-circle mr-1"></i>
                                     AI分析：时间最优选择，舒适度高，价格合理
+                                </div>
+                            </div>
+                            
+                            <!-- 地铁推荐 tooltip -->
+                            <div class="subway-tooltip">
+                                <div class="p-3">
+                                    <div class="text-sm font-medium text-gray-800 mb-3 flex items-center">
+                                        <i class="fas fa-subway mr-2 text-blue-500"></i>
+                                        地铁推荐 (到达后)
+                                    </div>
+                                    
+                                    <!-- 地铁推荐1 -->
+                                    <div class="mb-3 p-2 bg-gray-50 rounded-lg">
+                                        <div class="flex items-center justify-between mb-1">
+                                            <span class="text-xs text-orange-600 bg-orange-100 px-2 py-0.5 rounded">票价¥5</span>
+                                            <span class="text-xs text-green-600 font-medium">最佳</span>
+                                        </div>
+                                        <div class="text-sm text-blue-600 font-medium">地铁14号线 → 地铁5号线 → 地铁亦庄线</div>
+                                        <div class="text-xs text-gray-600 mt-1">
+                                            <span>52分钟</span>
+                                            <span class="mx-2">|</span>
+                                            <span>21.3公里</span>
+                                            <span class="mx-2">|</span>
+                                            <span>步行800米</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- 地铁推荐2 -->
+                                    <div class="mb-2 p-2 bg-gray-50 rounded-lg">
+                                        <div class="flex items-center justify-between mb-1">
+                                            <span class="text-xs text-orange-600 bg-orange-100 px-2 py-0.5 rounded">票价¥5</span>
+                                        </div>
+                                        <div class="text-sm text-blue-600 font-medium">地铁4号线大兴线 → 地铁10号线外环 → 地铁亦庄线</div>
+                                        <div class="text-xs text-gray-600 mt-1">
+                                            <span>53分钟</span>
+                                            <span class="mx-2">|</span>
+                                            <span>21.8公里</span>
+                                            <span class="mx-2">|</span>
+                                            <span>步行780米</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1561,17 +1623,20 @@
                         addAnalysisLog('<svg class="inline-block w-4 h-4 mr-2 text-blue-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>交通Agent正在分析个人报销额度...', 4000);
                         setTimeout(() => updateProgress(85, '交通Agent分析中'), 4500);
                         
-                        addAnalysisLog('<svg class="inline-block w-4 h-4 mr-2 text-blue-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>交通Agent已汇总分析结果，生成推荐列表', 5000);
+                        addAnalysisLog('<svg class="inline-block w-4 h-4 mr-2 text-blue-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>交通Agent正在考虑是否拥堵...', 4800);
+                        setTimeout(() => updateProgress(92, '交通Agent分析中'), 5300);
+                        
+                        addAnalysisLog('<svg class="inline-block w-4 h-4 mr-2 text-blue-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>交通Agent已汇总分析结果，生成推荐列表', 5800);
                         
                         // 显示真实内容（在最后一行日志显示时）
                         setTimeout(() => {
                             showTransportContent();
-                        }, 5000);
+                        }, 5800);
                         
                         // 最终状态：分析完成
                         setTimeout(() => {
                             updateProgress(100, '交通Agent分析完成');
-                        }, 5500);
+                        }, 6300);
                         break;
                     case '3': // 酒店推荐
                         // 如果从其他标签切换过来，需要隐藏其他内容
