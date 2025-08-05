@@ -1205,13 +1205,24 @@
                         hideTransportContent();
                         hideHotelContent();
                         
-                        // 初始状态：分析中
-                        updateProgress(20, '行程单Agent分析中');
+                        // 初始状态：从0%开始分析
+                        updateProgress(0, '行程单Agent分析中');
                         
-                        // 逐步添加分析日志
+                        // 进度条逐步推进
+                        setTimeout(() => {
+                            updateProgress(20, '行程单Agent分析中');
+                        }, 500);
+                        
+                        // 逐步添加分析日志和更新进度
                         addAnalysisLog('<svg class="inline-block w-4 h-4 mr-2 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>行程单Agent正在拆解出发地信息...', 1000);
+                        setTimeout(() => updateProgress(40, '行程单Agent分析中'), 1500);
+                        
                         addAnalysisLog('<svg class="inline-block w-4 h-4 mr-2 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>行程单Agent正在拆解目的地信息...', 2000);
+                        setTimeout(() => updateProgress(60, '行程单Agent分析中'), 2500);
+                        
                         addAnalysisLog('<svg class="inline-block w-4 h-4 mr-2 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>行程单Agent正在拆解开始时间...', 3000);
+                        setTimeout(() => updateProgress(80, '行程单Agent分析中'), 3500);
+                        
                         addAnalysisLog('<svg class="inline-block w-4 h-4 mr-2 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>行程单Agent已完成信息拆解，生成标准行程单', 5000);
                         
                         // 显示真实内容（在最后一行日志显示时）
@@ -1229,14 +1240,27 @@
                         hideApplicationContent();
                         hideHotelContent();
                         
-                        // 初始状态：分析中
-                        updateProgress(20, '交通Agent分析中');
+                        // 初始状态：从0%开始分析
+                        updateProgress(0, '交通Agent分析中');
                         
-                        // 逐步添加分析日志
+                        // 进度条逐步推进
+                        setTimeout(() => {
+                            updateProgress(20, '交通Agent分析中');
+                        }, 500);
+                        
+                        // 逐步添加分析日志和更新进度
                         addAnalysisLog('<svg class="inline-block w-4 h-4 mr-2 text-blue-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>交通Agent正在分析出行距离（上海-北京）...', 1000);
+                        setTimeout(() => updateProgress(30, '交通Agent分析中'), 1500);
+                        
                         addAnalysisLog('<svg class="inline-block w-4 h-4 mr-2 text-blue-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>交通Agent正在查询上海天气状况...', 2000);
+                        setTimeout(() => updateProgress(50, '交通Agent分析中'), 2500);
+                        
                         addAnalysisLog('<svg class="inline-block w-4 h-4 mr-2 text-blue-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>交通Agent正在查询北京天气状况...', 3000);
+                        setTimeout(() => updateProgress(70, '交通Agent分析中'), 3500);
+                        
                         addAnalysisLog('<svg class="inline-block w-4 h-4 mr-2 text-blue-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>交通Agent正在分析个人报销额度...', 4000);
+                        setTimeout(() => updateProgress(85, '交通Agent分析中'), 4500);
+                        
                         addAnalysisLog('<svg class="inline-block w-4 h-4 mr-2 text-blue-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>交通Agent已汇总分析结果，生成推荐列表', 5000);
                         
                         // 显示真实内容（在最后一行日志显示时）
@@ -1254,15 +1278,30 @@
                         hideApplicationContent();
                         hideTransportContent();
                         
-                        // 初始状态：分析中
-                        updateProgress(20, '酒店Agent分析中');
+                        // 初始状态：从0%开始分析
+                        updateProgress(0, '酒店Agent分析中');
                         
-                        // 逐步添加分析日志
+                        // 进度条逐步推进
+                        setTimeout(() => {
+                            updateProgress(20, '酒店Agent分析中');
+                        }, 500);
+                        
+                        // 逐步添加分析日志和更新进度
                         addAnalysisLog('<svg class="inline-block w-4 h-4 mr-2 text-purple-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>酒店Agent正在分析目的地位置（北人亦创国际会展中心）...', 1000);
+                        setTimeout(() => updateProgress(25, '酒店Agent分析中'), 1500);
+                        
                         addAnalysisLog('<svg class="inline-block w-4 h-4 mr-2 text-purple-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>酒店Agent正在查询周边酒店资源...', 2000);
+                        setTimeout(() => updateProgress(45, '酒店Agent分析中'), 2500);
+                        
                         addAnalysisLog('<svg class="inline-block w-4 h-4 mr-2 text-purple-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>酒店Agent正在分析个人报销预算范围...', 3000);
+                        setTimeout(() => updateProgress(60, '酒店Agent分析中'), 3500);
+                        
                         addAnalysisLog('<svg class="inline-block w-4 h-4 mr-2 text-purple-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>酒店Agent正在筛选价格标准范围...', 4000);
+                        setTimeout(() => updateProgress(75, '酒店Agent分析中'), 4500);
+                        
                         addAnalysisLog('<svg class="inline-block w-4 h-4 mr-2 text-purple-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>酒店Agent正在评估距离便利性...', 5000);
+                        setTimeout(() => updateProgress(90, '酒店Agent分析中'), 5500);
+                        
                         addAnalysisLog('<svg class="inline-block w-4 h-4 mr-2 text-purple-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>酒店Agent已汇总分析结果，生成推荐列表', 6000);
                         
                         // 显示真实内容（在最后一行日志显示时）
