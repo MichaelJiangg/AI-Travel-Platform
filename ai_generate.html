@@ -107,6 +107,15 @@
         button, a {
             transition: all 0.3s ease;
         }
+        .transport-option .flex:not(.absolute) {
+            margin-left: 2rem; /* 为选择框留出空间 */
+        }
+        .transport-option > div:not(.absolute) {
+            margin-left: 2rem; /* 为选择框留出空间 */
+        }
+        .transport-option.border-blue-500 {
+            box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.5);
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -482,13 +491,10 @@
 
                     <!-- 飞机列表 -->
                     <div id="content-plane" class="transport-content hidden">
-                        <div class="bg-white border-2 border-green-500 rounded-lg p-4 mb-3 shadow-md relative">
-                            <!-- AI推荐标签 -->
-                            <div class="absolute -top-3 -right-3 bg-green-500 text-white px-3 py-1 rounded-lg shadow-md flex items-center">
-                                <svg width="20" height="20" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" class="mr-1">
-                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M3.18335 6.00092C3.18335 3.93905 4.85482 2.26758 6.91668 2.26758C8.97855 2.26758 10.65 3.93905 10.65 6.00091V7.49935C11.2729 6.90161 12.1186 6.53425 13.05 6.53425C14.3242 6.53425 15.4379 7.22169 16.0403 8.24593C16.6573 7.6798 17.48 7.33425 18.3834 7.33425C19.6576 7.33425 20.7712 8.02169 21.3736 9.04593C21.9906 8.4798 22.8133 8.13424 23.7167 8.13424C25.6313 8.13424 27.1834 9.68632 27.1834 11.6009V20.4009C27.1834 24.2301 24.0792 27.3342 20.25 27.3342L10.65 27.3342H10.1167V27.3331C9.94161 27.3317 9.81393 27.3286 9.69806 27.3216C6.1985 27.1099 3.40768 24.3191 3.196 20.8195C3.18335 20.6104 3.18335 20.3628 3.18335 19.8676V6.00092Z" fill="white"/>
-                                </svg>
-                                <span class="font-bold">AI推荐</span>
+                        <div class="bg-white border border-gray-200 rounded-lg p-4 mb-3 shadow-md relative transport-option cursor-pointer" data-type="plane" data-id="MU5137" onclick="selectTransport(this)">
+                            <!-- 选择框 -->
+                            <div class="absolute top-3 left-3">
+                                <input type="radio" name="transport-selection" value="plane-MU5137" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500">
                             </div>
                             
                             <div class="flex justify-between items-center mb-2">
@@ -523,7 +529,11 @@
                             </div>
                         </div>
 
-                        <div class="bg-white border border-gray-200 rounded-lg p-4 mb-3">
+                        <div class="bg-white border border-gray-200 rounded-lg p-4 mb-3 relative transport-option cursor-pointer" data-type="plane" data-id="MU5238" onclick="selectTransport(this)">
+                            <!-- 选择框 -->
+                            <div class="absolute top-3 left-3">
+                                <input type="radio" name="transport-selection" value="plane-MU5238" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500">
+                            </div>
                             <div class="flex justify-between items-center mb-2">
                                 <div class="flex items-center">
                                     <img src="https://picsum.photos/id/26/30/30" alt="航空公司" class="w-8 h-8 rounded-full mr-2">
@@ -550,7 +560,11 @@
                             </div>
                         </div>
 
-                        <div class="bg-white border border-gray-200 rounded-lg p-4 mb-3">
+                        <div class="bg-white border border-gray-200 rounded-lg p-4 mb-3 relative transport-option cursor-pointer" data-type="plane" data-id="CA1835" onclick="selectTransport(this)">
+                            <!-- 选择框 -->
+                            <div class="absolute top-3 left-3">
+                                <input type="radio" name="transport-selection" value="plane-CA1835" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500">
+                            </div>
                             <div class="flex justify-between items-center mb-2">
                                 <div class="flex items-center">
                                     <img src="https://picsum.photos/id/28/30/30" alt="航空公司" class="w-8 h-8 rounded-full mr-2">
@@ -580,7 +594,11 @@
 
                     <!-- 高铁列表 -->
                     <div id="content-train" class="transport-content active">
-                        <div class="bg-white border-2 border-green-500 rounded-lg p-4 mb-3 shadow-md relative">
+                        <div class="bg-white border-2 border-green-500 rounded-lg p-4 mb-3 shadow-md relative transport-option cursor-pointer" data-type="train" data-id="G16" onclick="selectTransport(this)">
+                            <!-- 选择框 -->
+                            <div class="absolute top-3 left-3">
+                                <input type="radio" name="transport-selection" value="train-G16" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500">
+                            </div>
                             <!-- AI推荐标签 -->
                             <div class="absolute -top-3 -right-3 bg-green-500 text-white px-3 py-1 rounded-lg shadow-md flex items-center">
                                 <svg width="20" height="20" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" class="mr-1">
@@ -623,7 +641,11 @@
                             </div>
                         </div>
 
-                        <div class="bg-white border border-gray-200 rounded-lg p-4 mb-3">
+                        <div class="bg-white border border-gray-200 rounded-lg p-4 mb-3 relative transport-option cursor-pointer" data-type="train" data-id="G110" onclick="selectTransport(this)">
+                            <!-- 选择框 -->
+                            <div class="absolute top-3 left-3">
+                                <input type="radio" name="transport-selection" value="train-G110" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500">
+                            </div>
                             <div class="flex justify-between items-center mb-2">
                                 <div class="flex items-center">
                                     <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 mr-2">
@@ -1590,6 +1612,51 @@
                 updateTabAnalysis('1');
             }, 500);
         });
+
+        // 交通选择处理函数
+        function selectTransport(element) {
+            // 移除所有选项的选中状态
+            const allOptions = document.querySelectorAll('.transport-option');
+            allOptions.forEach(option => {
+                option.classList.remove('border-blue-500', 'bg-blue-50');
+                option.classList.add('border-gray-200');
+                const radio = option.querySelector('input[type="radio"]');
+                if (radio) radio.checked = false;
+            });
+            
+            // 为当前选中的选项添加选中状态
+            element.classList.remove('border-gray-200');
+            element.classList.add('border-blue-500', 'bg-blue-50');
+            
+            // 选中对应的单选框
+            const radio = element.querySelector('input[type="radio"]');
+            if (radio) {
+                radio.checked = true;
+            }
+            
+            // 获取选择的交通信息
+            const transportType = element.dataset.type;
+            const transportId = element.dataset.id;
+            const transportValue = radio ? radio.value : '';
+            
+            console.log('选择的交通方式:', {
+                type: transportType,
+                id: transportId,
+                value: transportValue
+            });
+            
+            // 可以在这里添加额外的处理逻辑，比如显示确认信息等
+            showTransportSelection(transportType, transportId);
+        }
+
+        // 显示交通选择确认信息
+        function showTransportSelection(type, id) {
+            const typeName = type === 'plane' ? '飞机' : '高铁';
+            
+            // 可以在页面某处显示选择确认信息
+            // 这里可以添加一个小的提示或者更新某个状态显示区域
+            console.log(`已选择：${typeName} ${id}`);
+        }
     </script>
 </body>
 </html>
