@@ -161,13 +161,7 @@
             transform: translateY(-1px);
         }
 
-        /* 地铁推荐卡片样式 */
-        .subway-recommendation {
-            background: white;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
+
 
         /* 自定义滚动条样式 */
         #aiStatusContent::-webkit-scrollbar {
@@ -682,91 +676,90 @@
 
                     <!-- 高铁列表 -->
                     <div id="content-train" class="transport-content active">
-                        <!-- G16高铁和地铁推荐组合 -->
-                        <div class="flex gap-4 mb-3">
-                            <!-- G16高铁卡片 -->
-                            <div class="flex-1 bg-white border-2 border-green-500 rounded-lg p-4 shadow-md relative transport-option cursor-pointer" data-type="train" data-id="G16" onclick="selectTransport(this)">
-                                <!-- 选择框 -->
-                                <div class="absolute top-3 left-3">
-                                    <input type="radio" name="transport-selection" value="train-G16" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500">
+                        <!-- G16高铁卡片（包含地铁推荐） -->
+                        <div class="bg-white border-2 border-green-500 rounded-lg p-4 mb-3 shadow-md relative transport-option cursor-pointer" data-type="train" data-id="G16" onclick="selectTransport(this)">
+                            <!-- 选择框 -->
+                            <div class="absolute top-3 left-3">
+                                <input type="radio" name="transport-selection" value="train-G16" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500">
+                            </div>
+                            <!-- AI推荐标签 -->
+                            <div class="absolute -top-3 -right-3 bg-green-500 text-white px-3 py-1 rounded-lg shadow-md flex items-center">
+                                <svg width="20" height="20" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" class="mr-1">
+                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M3.18335 6.00092C3.18335 3.93905 4.85482 2.26758 6.91668 2.26758C8.97855 2.26758 10.65 3.93905 10.65 6.00091V7.49935C11.2729 6.90161 12.1186 6.53425 13.05 6.53425C14.3242 6.53425 15.4379 7.22169 16.0403 8.24593C16.6573 7.6798 17.48 7.33425 18.3834 7.33425C19.6576 7.33425 20.7712 8.02169 21.3736 9.04593C21.9906 8.4798 22.8133 8.13424 23.7167 8.13424C25.6313 8.13424 27.1834 9.68632 27.1834 11.6009V20.4009C27.1834 24.2301 24.0792 27.3342 20.25 27.3342L10.65 27.3342H10.1167V27.3331C9.94161 27.3317 9.81393 27.3286 9.69806 27.3216C6.1985 27.1099 3.40768 24.3191 3.196 20.8195C3.18335 20.6104 3.18335 20.3628 3.18335 19.8676V6.00092Z" fill="white"/>
+                                </svg>
+                                <span class="font-bold">AI推荐</span>
+                            </div>
+                            
+                            <div class="flex justify-between items-center mb-2">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 mr-2">
+                                        <i class="fas fa-train"></i>
+                                    </div>
+                                    <span class="font-medium">G16 高铁</span>
                                 </div>
-                                <!-- AI推荐标签 -->
-                                <div class="absolute -top-3 -right-3 bg-green-500 text-white px-3 py-1 rounded-lg shadow-md flex items-center">
-                                    <svg width="20" height="20" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" class="mr-1">
-                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M3.18335 6.00092C3.18335 3.93905 4.85482 2.26758 6.91668 2.26758C8.97855 2.26758 10.65 3.93905 10.65 6.00091V7.49935C11.2729 6.90161 12.1186 6.53425 13.05 6.53425C14.3242 6.53425 15.4379 7.22169 16.0403 8.24593C16.6573 7.6798 17.48 7.33425 18.3834 7.33425C19.6576 7.33425 20.7712 8.02169 21.3736 9.04593C21.9906 8.4798 22.8133 8.13424 23.7167 8.13424C25.6313 8.13424 27.1834 9.68632 27.1834 11.6009V20.4009C27.1834 24.2301 24.0792 27.3342 20.25 27.3342L10.65 27.3342H10.1167V27.3331C9.94161 27.3317 9.81393 27.3286 9.69806 27.3216C6.1985 27.1099 3.40768 24.3191 3.196 20.8195C3.18335 20.6104 3.18335 20.3628 3.18335 19.8676V6.00092Z" fill="white"/>
-                                    </svg>
-                                    <span class="font-bold">AI推荐</span>
+                                <div class="text-xl font-bold text-red-500">¥553</div>
+                            </div>
+                            <div class="flex justify-between items-center mt-3">
+                                <div class="text-center">
+                                    <div class="text-lg font-medium">08:00</div>
+                                    <div class="text-sm text-gray-500">上海虹桥站</div>
                                 </div>
-                                
-                                <div class="flex justify-between items-center mb-2">
-                                    <div class="flex items-center">
-                                        <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 mr-2">
-                                            <i class="fas fa-train"></i>
-                                        </div>
-                                        <span class="font-medium">G16 高铁</span>
+                                <div class="flex flex-col items-center mx-4">
+                                    <div class="text-sm text-gray-500">4小时41分钟</div>
+                                    <div class="w-24 h-0.5 bg-gray-300 relative my-1">
+                                        <div class="absolute -top-1.5 right-0 w-3 h-3 transform rotate-45 border-t-2 border-r-2 border-gray-300"></div>
                                     </div>
-                                    <div class="text-xl font-bold text-red-500">¥553</div>
+                                    <div class="text-xs text-gray-500">直达</div>
                                 </div>
-                                <div class="flex justify-between items-center mt-3">
-                                    <div class="text-center">
-                                        <div class="text-lg font-medium">08:00</div>
-                                        <div class="text-sm text-gray-500">上海虹桥站</div>
-                                    </div>
-                                    <div class="flex flex-col items-center mx-4">
-                                        <div class="text-sm text-gray-500">4小时41分钟</div>
-                                        <div class="w-24 h-0.5 bg-gray-300 relative my-1">
-                                            <div class="absolute -top-1.5 right-0 w-3 h-3 transform rotate-45 border-t-2 border-r-2 border-gray-300"></div>
-                                        </div>
-                                        <div class="text-xs text-gray-500">直达</div>
-                                    </div>
-                                    <div class="text-center">
-                                        <div class="text-lg font-medium">12:41</div>
-                                        <div class="text-sm text-gray-500">北京南站</div>
-                                    </div>
+                                <div class="text-center">
+                                    <div class="text-lg font-medium">12:41</div>
+                                    <div class="text-sm text-gray-500">北京南站</div>
                                 </div>
-                                <div class="mt-2 bg-green-50 rounded-lg p-2 border border-green-100">
-                                    <div class="text-sm text-green-700">
-                                        <i class="fas fa-check-circle mr-1"></i>
-                                        AI分析：时间最优选择，舒适度高，价格合理
-                                    </div>
+                            </div>
+                            <div class="mt-2 bg-green-50 rounded-lg p-2 border border-green-100">
+                                <div class="text-sm text-green-700">
+                                    <i class="fas fa-check-circle mr-1"></i>
+                                    AI分析：时间最优选择，舒适度高，价格合理
                                 </div>
                             </div>
                             
-                            <!-- 地铁推荐卡片 -->
-                            <div class="w-80 subway-recommendation p-4">
+                            <!-- 地铁推荐区域 -->
+                            <div class="mt-4 pt-4 border-t border-gray-200">
                                 <div class="text-sm font-medium text-gray-800 mb-3 flex items-center">
                                     <i class="fas fa-subway mr-2 text-blue-500"></i>
                                     地铁推荐 (到达后)
                                 </div>
                                 
-                                <!-- 地铁推荐1 -->
-                                <div class="mb-3 p-2 bg-gray-50 rounded-lg">
-                                    <div class="flex items-center justify-between mb-1">
-                                        <span class="text-xs text-orange-600 bg-orange-100 px-2 py-0.5 rounded">票价¥5</span>
-                                        <span class="text-xs text-green-600 font-medium">最佳</span>
+                                <div class="flex gap-4">
+                                    <!-- 地铁推荐1 -->
+                                    <div class="flex-1 p-2 bg-gray-50 rounded-lg">
+                                        <div class="flex items-center justify-between mb-1">
+                                            <span class="text-xs text-orange-600 bg-orange-100 px-2 py-0.5 rounded">票价¥5</span>
+                                            <span class="text-xs text-green-600 font-medium">最佳</span>
+                                        </div>
+                                        <div class="text-sm text-blue-600 font-medium">地铁14号线 → 地铁5号线 → 地铁亦庄线</div>
+                                        <div class="text-xs text-gray-600 mt-1">
+                                            <span>52分钟</span>
+                                            <span class="mx-2">|</span>
+                                            <span>21.3公里</span>
+                                            <span class="mx-2">|</span>
+                                            <span>步行800米</span>
+                                        </div>
                                     </div>
-                                    <div class="text-sm text-blue-600 font-medium">地铁14号线 → 地铁5号线 → 地铁亦庄线</div>
-                                    <div class="text-xs text-gray-600 mt-1">
-                                        <span>52分钟</span>
-                                        <span class="mx-2">|</span>
-                                        <span>21.3公里</span>
-                                        <span class="mx-2">|</span>
-                                        <span>步行800米</span>
-                                    </div>
-                                </div>
-                                
-                                <!-- 地铁推荐2 -->
-                                <div class="mb-2 p-2 bg-gray-50 rounded-lg">
-                                    <div class="flex items-center justify-between mb-1">
-                                        <span class="text-xs text-orange-600 bg-orange-100 px-2 py-0.5 rounded">票价¥5</span>
-                                    </div>
-                                    <div class="text-sm text-blue-600 font-medium">地铁4号线大兴线 → 地铁10号线外环 → 地铁亦庄线</div>
-                                    <div class="text-xs text-gray-600 mt-1">
-                                        <span>53分钟</span>
-                                        <span class="mx-2">|</span>
-                                        <span>21.8公里</span>
-                                        <span class="mx-2">|</span>
-                                        <span>步行780米</span>
+                                    
+                                    <!-- 地铁推荐2 -->
+                                    <div class="flex-1 p-2 bg-gray-50 rounded-lg">
+                                        <div class="flex items-center justify-between mb-1">
+                                            <span class="text-xs text-orange-600 bg-orange-100 px-2 py-0.5 rounded">票价¥5</span>
+                                        </div>
+                                        <div class="text-sm text-blue-600 font-medium">地铁4号线大兴线 → 地铁10号线外环 → 地铁亦庄线</div>
+                                        <div class="text-xs text-gray-600 mt-1">
+                                            <span>53分钟</span>
+                                            <span class="mx-2">|</span>
+                                            <span>21.8公里</span>
+                                            <span class="mx-2">|</span>
+                                            <span>步行780米</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
