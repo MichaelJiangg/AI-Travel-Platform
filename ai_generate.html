@@ -84,8 +84,8 @@
             100% { transform: translateX(100%); }
         }
         @keyframes pulse-glow {
-            0%, 100% { box-shadow: 0 0 5px rgba(99, 102, 241, 0.4); }
-            50% { box-shadow: 0 0 20px rgba(99, 102, 241, 0.8), 0 0 30px rgba(139, 92, 246, 0.4); }
+            0%, 100% { box-shadow: inset 0 0 3px rgba(99, 102, 241, 0.4); }
+            50% { box-shadow: inset 0 0 6px rgba(99, 102, 241, 0.8), inset 0 0 8px rgba(139, 92, 246, 0.4); }
         }
         @keyframes ai-spin {
             0% { transform: rotate(0deg); }
@@ -101,7 +101,7 @@
             overflow: hidden;
             transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
             background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 50%, #06b6d4 100%);
-            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+            box-shadow: inset 0 1px 3px rgba(99, 102, 241, 0.3);
             animation: pulse-glow 2s infinite;
         }
         #aiProgressBar::after {
@@ -258,7 +258,7 @@
                 </div>
                 
                 <!-- AI状态提示条 -->
-                <div id="aiStatusBar" class="bg-gradient-to-br from-indigo-50 via-purple-50 to-cyan-50 border border-indigo-200 rounded-xl p-4 mb-6 relative transition-all duration-500 shadow-lg" style="min-height: 80px; max-height: 160px;">
+                <div id="aiStatusBar" class="bg-gradient-to-br from-indigo-50 via-purple-50 to-cyan-50 border border-indigo-200 rounded-xl p-4 mb-6 relative transition-all duration-500 shadow-lg">
                     <div class="flex items-start">
                         <!-- 现代化AI图标 -->
                         <div class="mr-4 flex-shrink-0 mt-1">
@@ -276,18 +276,18 @@
                                 <div class="absolute inset-0 rounded-full bg-gradient-to-r from-cyan-400 to-purple-400 opacity-20 blur-sm"></div>
                             </div>
                         </div>
-                        <div class="flex-grow min-w-0" style="margin-right: 12px;">
+                        <div class="flex-grow min-w-0" style="margin-right: 16px; padding-right: 8px;">
                             <!-- 固定的主状态文本 -->
                             <p class="status-title text-lg" id="aiStatusText">行程单Agent分析中</p>
                             
-                            <!-- 可滚动的分析日志区域 -->
-                            <div id="aiStatusContent" class="overflow-y-auto mt-3" style="max-height: 80px;">
-                                <div id="aiAnalysisLog" class="space-y-2 text-sm text-gray-600"></div>
-                            </div>
-                            
                             <!-- 进度条 -->
-                            <div class="h-2 progress-container rounded-full mt-3 overflow-hidden" style="width: 100%; max-width: 100%;">
+                            <div class="h-2 progress-container rounded-full overflow-hidden" style="width: calc(100% - 16px); max-width: calc(100% - 16px); margin-top: 12px; margin-bottom: 8px;">
                                 <div id="aiProgressBar" class="h-full rounded-full" style="width: 20%"></div>
+                            </div>
+
+                            <!-- 可滚动的分析日志区域 -->
+                            <div id="aiStatusContent" class="overflow-y-auto" style="max-height: 80px;">
+                                <div id="aiAnalysisLog" class="space-y-2 text-sm text-gray-600"></div>
                             </div>
                         </div>
                     </div>
@@ -1388,9 +1388,6 @@
                         logItem.classList.add('opacity-100');
                     }, 50);
                     
-                    // 自动调整高度和滚动
-                    adjustStatusBarHeight();
-                    
                     // 滚动到底部
                     const statusContent = document.getElementById('aiStatusContent');
                     statusContent.scrollTop = statusContent.scrollHeight;
@@ -1399,26 +1396,8 @@
 
             // 调整状态条高度函数
             function adjustStatusBarHeight() {
-                const statusBar = document.getElementById('aiStatusBar');
-                const content = document.getElementById('aiStatusContent');
-                const logContainer = document.getElementById('aiAnalysisLog');
-                
-                // 计算分析日志的内容高度
-                const logHeight = logContainer.scrollHeight;
-                const baseHeight = 80; // 最小高度
-                const maxHeight = 160; // 最大高度
-                
-                // 根据日志内容动态调整整个状态条高度
-                // 主状态文本 + 分析日志区域 + 进度条 + 内边距
-                let newHeight = Math.min(Math.max(baseHeight, 30 + logHeight + 20 + 20), maxHeight);
-                statusBar.style.height = newHeight + 'px';
-                
-                // 如果分析日志内容超过最大高度，显示滚动条
-                if (logHeight > 80) {
-                    content.style.overflowY = 'auto';
-                } else {
-                    content.style.overflowY = 'hidden';
-                }
+                // This function is now deprecated and no longer needed.
+                // The container height will be determined by its content.
             }
 
             // 模拟AI分析过程（可选功能）
